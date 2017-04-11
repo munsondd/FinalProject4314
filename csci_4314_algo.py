@@ -1,11 +1,16 @@
 ########################################################################
 # Final Project: CSCI-4314
-    # Date: 4/10/2017
-	# Benchmark sequence aligner against Bowtie
+    # Date: April 2017
+    
+    # Purpose: Benchmark sequence aligner against Bowtie
+
+    # Psuedo-Code:
 
     # Format:
-        # File contain sequence, sequence name
-        	# -F <fasta_filename> -S <sequence_name>
+	# Fasta file: Long sequence to be searched for alignment
+	# Sequence file: File that contains all smaller sequences to be aligned
+	# Alignment name: Specific small sequence in sequence file to be aligned
+	       	# -F <fasta_filename> -S <sequence_name> -A <alignment_sequence>
 ########################################################################
 
 if __name__ == '__main__':
@@ -13,13 +18,15 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description="flag format given as: -F <filename> -L <length/size of kmer")
 	parser.add_argument('-F', '-filename', help="given filename with sequence, must be .fasta")
 	parser.add_argument('-S', '-Sequence', help="given sequence name")
+	parser.add_argument('-A', '-Alignment', help="given sequence to align")
 	# order of arguments does not matter
 
 	args = parser.parse_args()
 	filename = args.F
 	sequence_name = args.S
+	alignment = args.A
 
-	arguments = [filename, sequence_name]
+	arguments = [filename, sequence_name, alignment]
 	# if either arguments are not given (left empty), then quit
 	if None in arguments:
 		if filename is None:
@@ -27,6 +34,9 @@ if __name__ == '__main__':
 			exit()
 		if sequence_name is None:
 			print("sequence_name not given")
+			exit()
+		if alignment is None:
+			print("sequence for alignmnet not given")
 			exit()
 
 	# only accept file that are fasta
@@ -50,7 +60,7 @@ if __name__ == '__main__':
 
 	append = fullList.append # avoid re-using append (to improve running time)
 	with open(filename, "r") as given_file:
-		seq = '' # helped by Subi Nair
+		seq = ''
 		for line in given_file:
 			line = line.rstrip('\n').replace(" ", "@").replace("\t", "@") # replace spaces with known character and replace tabs
 			if line.startswith('>'):
