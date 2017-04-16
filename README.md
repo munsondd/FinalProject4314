@@ -4,13 +4,15 @@
  2. Requires python:  
  ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta```
 
-#interpret bowtie results
+
+### interpret bowtie results
+
 bowtie results are printed as follows:
 
 bowtie results are split into two parts. First is the information about the test file pulled from the fasta title. it is formated as follows:
- <id> reference=<reference info> |position=<expected position> description=<description>
+```<id> reference=<reference info> |position=<expected position> description=<description>```
 Next is the bowtie results in the following format:
-<strand{+|-}    <reference info>        <bowtie alignment position>     <sequence>
+```<strand{+|-}    <reference info>        <bowtie alignment position>     <sequence>```
 
 # Project Proposal: Benchmark Bowtie
 
