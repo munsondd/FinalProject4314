@@ -17,12 +17,24 @@
 
 import argparse # parse given flag options
 import re
+'''
+scoring_matrix = {'AA':  0, 'AC': 1, 'AG':  1, 'AT': 1, 'A-': 1,
+				 'CA': 1, 'CC':  0, 'CG': 1, 'CT':  1, 'C-': 1,
+				 'GA':  1, 'GC': 1, 'GG':  0, 'GT': 1, 'G-': 1,
+				 'TA': 1, 'TC':  1, 'TG': 1, 'TT':  0, 'T-': 1,
+				 '-A': 1, '-C': 1, '-G': 1, '-T': 1, '--': 1}
+'''
+match_score = 3
+mismatch_score = -2
+gap_score = -1
 
-scoring_matrix = {'AA':  5, 'AC': -1, 'AG': -2, 'AT': -1, 'A-': -3,
-				  'CA': -1, 'CC':  5, 'CG': -3, 'CT': -2, 'C-': -4,
-				  'GA': -2, 'GC': -3, 'GG':  5, 'GT': -2, 'G-': -2,
-				  'TA': -1, 'TC': -2, 'TG': -2, 'TT':  5, 'T-': -1,
-				  '-A': -3, '-C': -4, '-G': -2, '-T': -1, '--': -100}
+'''
+scoring_matrix = {'AA':  0, 'AC': 1, 'AG':  1, 'AT': 1, 'A-': 1,
+				 'CA': 1, 'CC':  0, 'CG': 1, 'CT':  1, 'C-': 1,
+				 'GA':  1, 'GC': 1, 'GG':  0, 'GT': 1, 'G-': 1,
+				 'TA': 1, 'TC':  1, 'TG': 1, 'TT':  0, 'T-': 1,
+				 '-A': 1, '-C': 1, '-G': 1, '-T': 1, '--': 1}
+'''
 
 ########################################################################
 ## SETTING UP THE DICTIONARIES FROM THE GIVEN FILES
@@ -79,7 +91,7 @@ def seqDictPairs(header_list, sequence_list):
 	return seq_gen_dict
 
 ########################################################################
-## LOCAL ALIGNMENT DYNAMIC PROGRAMMING
+## CREATE MATRICES FOR LOCAL ALIGNMENT's DYNAMIC PROGRAMMING
 
 def orderedPairs(align_dict, genome_seq):
 	# creates pairs for each aligners and the genome
@@ -96,10 +108,57 @@ def zeroMatrix(width_given, height_given):
 	matrix = [[0 for x in range(width)] for y in range(height)]
 	return matrix
 
-def SmithWaterman(sequence_large_genome, sequence_small_align):
-	# python implementation of Smith Waterman Algorithm for local alignments
-	pass
+def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
+	# sets up dynamic program for local alignment to fill matrix
+	print("dp local matrix for r {0}".format((sequence_large_genome, sequence_small_align)))
+	
+	# top is the top of the matrix, and side is the right hand side (location for both sequences)
+	top_sequence = list(sequence_large_genome)
+	side_sequence = list(sequence_small_align) # breaks sequence into a list of values
 
+	column_value = len(top_sequence)
+	row_value = len(side_sequence)
+
+	update_matrix = list(zero_matrix) # re-creates matrix so it can be updated
+
+	for row in range(1, row_value): # ignores the first column's dash
+		for column in range(1, column_value+1): # plus one to ignore the first row's dash
+
+			#print("row={0}, column{1}".format(row, column))
+			# match or mismatch for current cell
+			bases_match = False
+			if top_sequence[column-1] == side_sequence[row-1]:
+				current_score_index = match_score
+				bases_match = True
+			else:
+				current_score_index = mismatch_score
+
+			# determine the adjacent cells that will be compared
+			top = update_matrix[row-1][column]
+			left = update_matrix[row][column-1]
+			diagonal = update_matrix[row-1][column-1]
+
+			# update adjacent cells if the current index matches
+			diagonal += current_score_index
+			top += gap_score
+			left += gap_score
+
+			#print("top: {0}, left: {1}, diagonal: {2}".format(top, left, diagonal))
+			#print("max = {0}".format(max(0, top, left, diagonal)))
+			
+			update_matrix[row][column] = max(0, top, left, diagonal)
+
+	for row in update_matrix:
+		print(row)
+
+def smithWaterman(sequence_large_genome, sequence_small_align, dp_matrix):
+	# python implementation of Smith Waterman Algorithm for local alignments
+	print("smith waterman for {0}".format((sequence_large_genome, sequence_small_align)))
+
+########################################################################
+## PRINT ALIGNMENT
+def printAlignments():
+	pass
 ########################################################################
 
 if __name__ == '__main__':
@@ -172,10 +231,16 @@ if __name__ == '__main__':
 		if len(aligned_sequence) > len(genome_to_align):
 				print("\n\t'{0}' is larger than the genome '{1}' to compare against, choose a different sequence or genome\n".format(pair[0], pair[1]))
 				exit()
-		
+
+		# add gap value at the start of both sequences
+		aligned_sequence = '-' + aligned_sequence
+		genome_to_align = '-' + genome_to_align
+
 		# width of matrix is the size of the genome, height is the size of the aligner sequence
-		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
+		zero_matrix = zeroMatrix(len(genome_to_align)+1, len(aligned_sequence))
 		print(pair)
-		for row in zero_matrix:
-			print(row)
+		#for row in zero_matrix:
+		#	print(row)
+		dp_local_matrix = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
+		#smithWaterman(genome_to_align, aligned_sequence, dp_local_matrix)
 		print("\n")
