@@ -8,7 +8,7 @@
 
     # Psuedo-Code:
     
-    # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename> -A <align sequence>
+    # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename>
 	# Sequence file: File that contains all large genomes that will be aligned against
 		# Sequence: The specific sequence within the file that will be aligned against
 	# Alignment File: File that contains all the smaller sequences to be aligned
@@ -16,6 +16,48 @@
 
 import argparse # parse given flag options
 import re
+
+def readingFileDict(filename):
+	# reads in the file and returns a dictionay with headers and sequences: {header:sequence}
+	fullList = []
+	seqlist = []
+	header_list = []
+	nucleo_list = []
+
+	append = fullList.append # avoid re-using append (to improve running time)
+	with open(filename, "r") as given_file:
+		seq = ''
+		for line in given_file:
+			line = line.rstrip('\n').replace(" ", "@").replace("\t", "@").replace("\r", "@") # replace spaces with known character and replace tabs
+			if line.startswith('>'):
+				line = line + ' '
+				line = line.replace('>', ' >')
+			append(line)
+		seq = ''.join(fullList).upper()
+		seqList = seq.split()
+		# Pulls out the sequences and genomes
+		# By removing any extranous puncutation with predicatble characters to be spliced
+
+		# Returns the header sequence name
+		append = header_list.append # avoid re-using append (to improve running time)
+		for element in seqList:
+			if ">" in element:
+				element = element.replace("@", "")
+				element = element.strip(">") # assumes all header/sequences starts with >
+				append(element) # returns a list of  headers ['chrI', 'chrII', etc...]
+
+		nucleo_list =  [x for x in seqList if '>' not in x] # returns a list of sequence ['ATC', 'TGGC', etc..]
+		nucleo_list = map(str.upper, nucleo_list) # convert all sequences to upper case for consitency
+
+		for i in range(len(nucleo_list)): # remove extra @ left behind by replace and replace n with A (n = any ATCG)
+			if 'N' in nucleo_list[i]:
+				new_value = nucleo_list[i].replace("N", "A")
+				nucleo_list[i] = new_value
+			if '@' in nucleo_list[i]:
+				new_value = nucleo_list[i].replace("@", "")
+				nucleo_list[i] = new_value
+		seq_dict = seqDictPairs(header_list, nucleo_list) # tuples of a pair's list and a dictionary {seq:gen}
+	return seq_dict
 
 def seqDictPairs(header_list, sequence_list):
 	# creates a dictionary between the sequence (header) and the associated genome {seq:genome} dictionary
@@ -25,6 +67,14 @@ def seqDictPairs(header_list, sequence_list):
 	seq_gen_dict = zip(header_list, sequence_list) # combine the two lists
 	seq_gen_dict = dict(seq_gen_dict) # create new dictionary from the lists
 	return seq_gen_dict
+
+def orderedPairs(align_dict, genome_seq):
+	# creates pairs for each aligners and the genome
+	# SEQ_0 and GEN_0, SEQ_1 and GEN_0
+	total_pairs = []
+	for aligner_sequence in align_dict:
+		total_pairs.append([aligner_sequence, genome_seq])
+	return total_pairs
 
 def SmithWaterman(sequence_large_genome, sequence_small_align):
 	# python implementation of Smith Waterman Algorithm for local alignments
@@ -75,57 +125,20 @@ if __name__ == '__main__':
 	given file based on if the line starts with > as seen in fasta
 	'''
 
-	fullList = []
-	seqlist = []
-	header_list = []
-	nucleo_list = []
-
-	append = fullList.append # avoid re-using append (to improve running time)
-	with open(alignment_filename, "r") as given_file:
-		seq = ''
-		for line in given_file:
-			line = line.rstrip('\n').replace(" ", "@").replace("\t", "@") # replace spaces with known character and replace tabs
-			if line.startswith('>'):
-				line = line + ' '
-				line = line.replace('>', ' >')
-			append(line)
-		seq = ''.join(fullList).upper()
-		seqList = seq.split()
-		# Pulls out the sequences and genomes
-		# By removing any extranous puncutation with predicatble characters to be spliced
-
-		# Returns the header sequence name
-		append = header_list.append # avoid re-using append (to improve running time)
-		for element in seqList:
-			if ">" in element:
-				element = element.replace("@", " ")
-				element = element.strip(">") # assumes all header/sequences starts with >
-				append(element) # returns a list of  headers ['chrI', 'chrII', etc...]
-
-		# Returns the genome/sequence
-		nucleo_list =  [x for x in seqList if '>' not in x] # returns a list of sequence ['ATC', 'TGGC', etc..]
-		nucleo_list = map(str.upper, nucleo_list) # convert all sequences to upper case for consitency
-
-	small_align_dict = seqDictPairs(header_list, nucleo_list)
-	# returns a dictionary that combines header/align {seq:alg} for the file with all the short sequences that will be aligned
+	small_align_dict = readingFileDict(alignment_filename)
 	#print(small_align_dict)
-
-	# find the sequence that is requested in the arguments, if not found, exit
-	found = False
-	with open(sequence_filename, "r") as given_file:
-		sequence_name = sequence_name.lower()
-		if not found:
-			for line in given_file:
-				if line.startswith('>'):
-					search_line = re.search((r'{0}'.format(sequence_name)), line.lower())
-					if search_line is not None:
-						found=True
-						sequence_in_file = next(given_file) # returns the next line in the file which is the associated sequence
-		if not found: # if the value is never found, exit
-			print("\n\t{0} is not found in given sequence file {1}, please choose a different file or sequence name\n".format(sequence_name, sequence_filename))
-			exit()
-	large_genome_dict = {}
-	sequence_in_file = sequence_in_file.strip('\n')
-	large_genome_dict[sequence_name] = sequence_in_file
-	# returns a dictionary that contains the name and sequence that will be compared against with all the genomes to be compared against
+	large_genome_dict = readingFileDict(sequence_filename)
 	#print(large_genome_dict)
+	# returns a dictionary that contains the name and sequence that will be compared against with all the genomes to be compared against
+	
+	# exit if the genome name is not found in the genome file
+	if sequence_name not in large_genome_dict.keys():
+		print("\n\t'{0}' is not found in genome file '{1}', choose a different file or sequence name".format(sequence_name, sequence_filename))
+		print("\n\tAvailable genomes names:")
+		for key in large_genome_dict.keys():
+			print("\t{0}".format(key))
+		print("\n")
+		exit()
+
+	paired_seq = orderedPairs(small_align_dict, sequence_name)
+	print(paired_seq)
