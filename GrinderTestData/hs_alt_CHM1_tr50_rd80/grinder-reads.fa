@@ -1,0 +1,150 @@
+>1 reference=gi|528476224|ref|NW_004929294.1| position=24633241..24633320 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CATATACCTGTCCTTTCCTAACTGATTTTCTACACTGTCATGCCCACCTTTGAGTAGAGT
+CTTTGCTTTAACCTTTTTTG
+>2 reference=gi|528476404|ref|NW_004929290.1| position=complement(18574409..18574488) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AAAAAAAGGAAATTTCAGGCCAATATCCCTGATGAACATCAATGCGAAAATCCTCAATAA
+AATACTGGCAAACTGAATCC
+>3 reference=gi|528476224|ref|NW_004929294.1| position=complement(7513337..7513416) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AAATCTAAATGTATCAGTAATTGTAACAAATATAAATGAACTAAAATTCCAAAGTAAAAG
+ACAGAGATTTTCTTATTGCT
+>4 reference=gi|528476404|ref|NW_004929290.1| position=28655533..28655612 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GCTAATATAATTCTGAGGTAGTATGAGTTGTTTCTTCAGCCATTCAACATGCATTTATTA
+TATATTTTAAAATATATATT
+>5 reference=gi|528476404|ref|NW_004929290.1| position=complement(60387317..60387396) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TTCAAATTAATGCATTCAATTATTTAACAGATGTTTATTAAGCACCTACAACAGGCCAGG
+TTCTATTCTAGGTGTTGGAG
+>6 reference=gi|528476224|ref|NW_004929294.1| position=complement(17577577..17577656) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AGGGAGTGGGTGCCATATTCTCATTCCTGTATCTCCCTTCTCTTGCTTTAACTGGAGTTT
+GGATTGAGGATGAAAACCTG
+>7 reference=gi|528476404|ref|NW_004929290.1| position=8470628..8470707 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GGAGAATTACTTGAACCCAGGAGGCGGAGGTTGCAGTGAACAGAGATCGGGCCACTGCAC
+TGCAGCCTGGGTGACAGAAA
+>8 reference=gi|528476404|ref|NW_004929290.1| position=30161783..30161862 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TCCCAGCTACTCAGGAAGCTGAGGCAGGAGAATCGCTTGAACTTGGGTGGTGGAGTTTGC
+AGTGAGCCAAGATTGTGCCA
+>9 reference=gi|528476460|ref|NW_004929289.1| position=complement(10608369..10608448) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GTGTGTGTTGTTCCCCTCCCTGTGTCCATGCATTCTCATTGTTCAGCTCCCACTTATAAG
+TGAGAACACGCAGCATTTGG
+>10 reference=gi|528476224|ref|NW_004929294.1| position=40366827..40366906 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TGAAATGTTCAAATATAAAAAAATTTTAGACCTCTTGACAATGTAGGAATTGACAGCCAG
+TACCATTATTAGTGCTTATT
+>11 reference=gi|528476224|ref|NW_004929294.1| position=complement(8141198..8141277) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TCCCCAGGCTCAAGTGATCCTTCCTCCTTGGCCTCCCAAGTAGCTAGGATTACAAGTGCA
+CACCACCACGCTTGGCTAAT
+>12 reference=gi|528476293|ref|NW_004929293.1| position=33720121..33720200 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TCTGCCCTGTGGCCTGCCTTGCTGTAAGTTCCAGCTAAACTGTATTGGATGCTGACCTAG
+GATGAAAATACCTGTCCTCA
+>13 reference=gi|528476224|ref|NW_004929294.1| position=complement(29354271..29354350) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ATAAACTCCACTTACCTTTGCTGTTTCATAATAGAGTCAAAACCGATAGTCTCCACAGGT
+TTATTTCCAATTGTAACAAT
+>14 reference=gi|528476404|ref|NW_004929290.1| position=18899481..18899560 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ACTCATAGGTCAAAGAAGAAATTATAAGACAAATTAGAAAAAAACTTCCAACTGAATAAA
+AGTGAAAACACAACGTATCA
+>15 reference=gi|528476404|ref|NW_004929290.1| position=75271398..75271477 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNN
+>16 reference=gi|528476224|ref|NW_004929294.1| position=complement(21538981..21539060) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GGCATCATGCTACCCAACTTCAAACTATACTACAGGGCTACAATAACCAAAACAGCATGG
+TATTGGAACAAACACATATA
+>17 reference=gi|528476224|ref|NW_004929294.1| position=complement(30418421..30418500) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TTTTATGGCTAAATAGTATTCCATCATATATATATACATATATACACATATATATATACA
+CACACACACATATATATATC
+>18 reference=gi|528476404|ref|NW_004929290.1| position=complement(86171607..86171686) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TAATACAACTGCAAAGTTAGATTCTAAAAACAGAGGTGTTCTGGTCAACTCAGGTGTTTT
+GTTTTAACAAGGCAGCTAGG
+>19 reference=gi|528476404|ref|NW_004929290.1| position=24652526..24652605 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GGCCGGGTGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAAGCCGAGGTAGGAGGA
+TCACTTGAGGCCAGGAGTTC
+>20 reference=gi|528476404|ref|NW_004929290.1| position=complement(9185702..9185781) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ATATGTGTGTGTCTGTACTGGGGGGACTAGAATGACACCCCTTCCTTTAATAACTATATT
+GTAAACAAATTGTGTTCTGG
+>21 reference=gi|528476460|ref|NW_004929289.1| position=complement(6321541..6321620) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GCTCTATTCCCCAAGCTGGAGTGCAGTGGTGTGATCTCGGCTCACTGCAACCACCTCATC
+CCGGGTTCAAGAAATTCTCC
+>22 reference=gi|528476293|ref|NW_004929293.1| position=complement(40640585..40640664) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TCACACCAAAAGCACAGGCAAGAAAATTAAAATTAGAGAAGTGAAAGTACATCAAACTAA
+AAAGCTTCTGTGCAGCAAAT
+>23 reference=gi|528476404|ref|NW_004929290.1| position=18387854..18387933 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TTCCAACCCTTTAGGTTTAAAAAATCAGACCATATTTTCATTTTCAAGAGAATGAGGGAG
+AGGAAATGCAGCTCCAAGAC
+>24 reference=gi|528476404|ref|NW_004929290.1| position=46413511..46413590 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AGCATTTGGGAAACCCATGATGTATAGGGCATTATAATTATCACTTGGAATATGAAAATG
+TGGGAGATTGCTTCTTGTCC
+>25 reference=gi|528476293|ref|NW_004929293.1| position=complement(58383174..58383253) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CCTCCACTTTATTCAGGGATGCATTTTGGTGAAGCCCACTAAGCTTTTGGGATCTTTCAG
+CGATGGGTGGAAGTCATATC
+>26 reference=gi|528476224|ref|NW_004929294.1| position=24206795..24206874 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CTGCTGGAGTCCTTCATTGCGTGAGACTCATGACTCCTTTCTTCCTTTCACTGTTCCCTT
+TTGGAATGGGAGAGTCTATC
+>27 reference=gi|528476293|ref|NW_004929293.1| position=16353840..16353919 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CTTCAAAAAATCAACGAATCCAGGAGCTGGTATTTTGAAAAGATCAACAAAATTGATAGA
+CTGCTAGCAAGACTAATAAA
+>28 reference=gi|528476293|ref|NW_004929293.1| position=28389055..28389134 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GTGCTGCACCCATTAACTCATCGTTTACACTAGGTATTTCTCCTAATGCTATCCCTCCCC
+CCTCCCCCCATCCCACAACA
+>29 reference=gi|528476293|ref|NW_004929293.1| position=20881607..20881686 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ACTTTGTTTGCTGTCTCTGTTCTTCCGTCTCTCTCCTCATCCTCCCATCTTTCAGTTCCT
+TTCCTCTGTCTAGAGCATGC
+>30 reference=gi|528476460|ref|NW_004929289.1| position=5920818..5920897 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ACATTACTGAATAAAATTCAATACATGATCTCTATCAAAATCCCTTTCTTGGGGAGTTTG
+TAAAAATTGCCTTTTTTTTT
+>31 reference=gi|528476460|ref|NW_004929289.1| position=complement(5369498..5369577) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ACCATCTACCTGGGTATTCCTTAATCTAGTCAAGTTGACATCCAAAATCAATCATCACAG
+GTCCACCCCTTACCAACTGG
+>32 reference=gi|528476404|ref|NW_004929290.1| position=90431414..90431493 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TTTCTCAATCTTTTTTATTATCACCCCCTTAGACATGTTTTCCTAATTATCTCCCCGATG
+AAATATTAACACCACAGATA
+>33 reference=gi|528476224|ref|NW_004929294.1| position=complement(23782632..23782711) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GTTTATGTATATGTTGTATATATTGTGTGTGTTGTGTGTATGTGTACATGTGTGTTTTGT
+GCATGTGTGTAGTGTTATGT
+>34 reference=gi|528476293|ref|NW_004929293.1| position=complement(15019180..15019259) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TACTCAAGTAAATAACAATTACCATAAAGAAACATGTCAATAAACTATATCCCATTAAGA
+AGAAAATCTTTTTATCAAAA
+>35 reference=gi|528476404|ref|NW_004929290.1| position=64314353..64314432 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TCTTTTCAGTTTGTGCCTTTAATTTCCTCTGCATACTCCTGGTTCTTCTAGTTGCAATTC
+CAGAGAATGAAATGTCTGAG
+>36 reference=gi|528476404|ref|NW_004929290.1| position=complement(25340715..25340794) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GATAGAGACAAAGGAGACCTGTTTTATCCGTGGACCCAAAACTCCAGCACCAGTCACGGA
+CTGGGAAGGCAGCCTTCCCT
+>37 reference=gi|528476293|ref|NW_004929293.1| position=33651907..33651986 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CTTCAGCTGTTTACAAATCAGATATAATAATCATTCCTTCCCTGTTTCTCAGAAGGCACA
+TCTTCAGGGCTGATTTTTCT
+>38 reference=gi|528476404|ref|NW_004929290.1| position=complement(46595679..46595758) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+CACAAAGGGCAAATCTTAACATATATAAACTTTAAAAAAATCATTTAGGCAGTCAGGGTA
+ATCCCGGAATGAAATACAGC
+>39 reference=gi|528476404|ref|NW_004929290.1| position=complement(29322115..29322194) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GTACACTGTTCAGAATGAGAAACTTCTACAAGTAGATTGACTCTCCTTGCTCTGCCCCTT
+TCTTCACTAAAAGAGTATTT
+>40 reference=gi|528476293|ref|NW_004929293.1| position=31338514..31338593 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GATACCTAGAAACATGGATTCTTAGTGGTGGGTTTTGGCATCAAACACACATTGGCCTGA
+GTCAGAGCTTCATCCATTTC
+>41 reference=gi|528476404|ref|NW_004929290.1| position=55363772..55363851 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AATAGGTATCAAGTGATCATCACTTCTTTTCCTGTAACAGAAAGGGAAAGAAGAAAAGAG
+GAAAGATACAATACTTTAAC
+>42 reference=gi|528476460|ref|NW_004929289.1| position=21726530..21726609 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GCAGTCAGGGAAAACTTTCCTGAGAAGGGGATGGTGGAGGATCCAGGGAGGTGAGGTGGG
+GAGCAAGCCAGTACAGTTGT
+>43 reference=gi|528476460|ref|NW_004929289.1| position=14236555..14236634 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+ATAGCATGGTGTGTTCAAAGCCTAGGTTGTGGAGTCAGATGAGACACAACATGGGCTTGG
+GTACTGTATTAGTCCGTTTG
+>44 reference=gi|528476293|ref|NW_004929293.1| position=29553325..29553404 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TAAGAAAAGAAGGGACAGAATCAAGCTCTCCTGCTGATCCTGAGTATGTGAATTTGTTTA
+GGGGAGATTTTTACCCATGG
+>45 reference=gi|528476293|ref|NW_004929293.1| position=32404207..32404286 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GAGGGGAGGTCAGCTGGAGACTGGGGCCACTCCTGAACACACCTACACACTGATTTCTGA
+GCCCTTCTGCATTCTTGCTG
+>46 reference=gi|528476404|ref|NW_004929290.1| position=87209049..87209128 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+GGCATTCTAGGGGCTGGGAGATTGGTGAGACACCCCAGATGTCTGCTTGACTTCAGGGTG
+GCTGATTAGGGTGGGCTGAT
+>47 reference=gi|528476224|ref|NW_004929294.1| position=21287556..21287635 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+AATAGAATGTAGCATAAATGACTGCTTACCTTCCTAGGCTGATCCATAAAAGGCAATGCA
+GTGTCAGCTTGTCCACTGGA
+>48 reference=gi|528476293|ref|NW_004929293.1| position=39429705..39429784 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TAACTTGGTTTTGAAGGTTCCTTTCTGCTCTACAAGTTCTGTTCTTGACTATCTTCCTAG
+CAATGAGCTGTGTACTGTGT
+>49 reference=gi|528476224|ref|NW_004929294.1| position=36678935..36679014 description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TGTTGAGCACGTATAAGTGCATCATATGAAAGGGTTCTTTAACAATTGTCTTCTTTCAGC
+ATAGCAGCCATTTGAGACCC
+>50 reference=gi|528476224|ref|NW_004929294.1| position=complement(38587142..38587221) description="Homo sapiens chromosome 1 genomic scaffold, alternate assembly CHM1_1.1, whole genome shotgun sequence"
+TGTTCCAAATTACCCCAAAACGTAGCAGCTTAAAAGTTTCTGAAGGTCAGGAATCCAAGA
+GCGGTTTAGGTTGGTGTTTC
