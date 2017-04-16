@@ -1,3 +1,9 @@
+# Run Existing Algorithm
+ To run code:
+ 1. Download repo
+ 2. Requires python:  
+ ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta```
+
 # Project Proposal: Benchmark Bowtie
 
 ![](http://bowtie-bio.sourceforge.net/images/bowtie_logo.png)
