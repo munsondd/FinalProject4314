@@ -1,0 +1,2 @@
+# rank	seq_id	rel_abund_perc
+1	NC_020677.1	100
