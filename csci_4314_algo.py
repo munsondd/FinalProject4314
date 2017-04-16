@@ -5,6 +5,7 @@
     # Purpose: Benchmark sequence aligner against Bowtie
     # Create a local aligner to benchmark against Bowtie
     # Compares a list of small sequences to one large genome and returns all alignments
+    # Finds local regions with the highest levels of conservation/similarity
 
     # Psuedo-Code:
     
@@ -16,6 +17,15 @@
 
 import argparse # parse given flag options
 import re
+
+scoring_matrix = {'AA':  5, 'AC': -1, 'AG': -2, 'AT': -1, 'A-': -3,
+				  'CA': -1, 'CC':  5, 'CG': -3, 'CT': -2, 'C-': -4,
+				  'GA': -2, 'GC': -3, 'GG':  5, 'GT': -2, 'G-': -2,
+				  'TA': -1, 'TC': -2, 'TG': -2, 'TT':  5, 'T-': -1,
+				  '-A': -3, '-C': -4, '-G': -2, '-T': -1, '--': -100}
+
+########################################################################
+## SETTING UP THE DICTIONARIES FROM THE GIVEN FILES
 
 def readingFileDict(filename):
 	# reads in the file and returns a dictionay with headers and sequences: {header:sequence}
@@ -68,18 +78,29 @@ def seqDictPairs(header_list, sequence_list):
 	seq_gen_dict = dict(seq_gen_dict) # create new dictionary from the lists
 	return seq_gen_dict
 
+########################################################################
+## LOCAL ALIGNMENT DYNAMIC PROGRAMMING
+
 def orderedPairs(align_dict, genome_seq):
 	# creates pairs for each aligners and the genome
 	# SEQ_0 and GEN_0, SEQ_1 and GEN_0
 	total_pairs = []
 	for aligner_sequence in align_dict:
 		total_pairs.append([aligner_sequence, genome_seq])
+		'''example: [['SEQ_1', 'GEN_1'], ['SEQ_0', 'GEN_1'], ['SEQ_3', 'GEN_1'], ['SEQ_2', 'GEN_1']]'''
 	return total_pairs
+
+def zeroMatrix(width_given, height_given):
+	# sets up an matrix with zeros for the size of the sequences given, with gaps
+	width, height = width_given, height_given
+	matrix = [[0 for x in range(width)] for y in range(height)]
+	return matrix
 
 def SmithWaterman(sequence_large_genome, sequence_small_align):
 	# python implementation of Smith Waterman Algorithm for local alignments
 	pass
 
+########################################################################
 
 if __name__ == '__main__':
 	import argparse # parse given flag options
@@ -140,5 +161,21 @@ if __name__ == '__main__':
 		print("\n")
 		exit()
 
-	paired_seq = orderedPairs(small_align_dict, sequence_name)
-	print(paired_seq)
+	paired_seq = orderedPairs(small_align_dict, sequence_name) # creates pairs for each sequence and the genome used
+
+	# creates a zero matrix for each aligned sequences compared to the larger genome
+	for pair in paired_seq:
+		aligned_sequence = small_align_dict[pair[0]]
+		genome_to_align = large_genome_dict[pair[1]]
+		
+		# if the smaller aligning sequence is greater than the genome, exit
+		if len(aligned_sequence) > len(genome_to_align):
+				print("\n\t'{0}' is larger than the genome '{1}' to compare against, choose a different sequence or genome\n".format(pair[0], pair[1]))
+				exit()
+		
+		# width of matrix is the size of the genome, height is the size of the aligner sequence
+		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
+		print(pair)
+		for row in zero_matrix:
+			print(row)
+		print("\n")
