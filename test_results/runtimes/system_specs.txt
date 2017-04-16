@@ -1,0 +1,3 @@
+Memory: 8GB
+Processor: Intel Core i5-6200UCPU@2.30GHzx4
+OS type: 64-bit

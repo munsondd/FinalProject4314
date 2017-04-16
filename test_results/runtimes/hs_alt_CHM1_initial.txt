@@ -1,0 +1,201 @@
+>hs_alt_CHM1_TR50_rd10
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.073s
+user	0m0.020s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd20
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.068s
+user	0m0.012s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd30
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.093s
+user	0m0.044s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd40
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.094s
+user	0m0.048s
+sys	0m0.044s
+
+>hs_alt_CHM1_TR50_rd50
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.097s
+user	0m0.040s
+sys	0m0.056s
+
+>hs_alt_CHM1_TR50_rd60
+t_results/hs_alt_CHM1_TR50_rd60.fq
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.096s
+user	0m0.040s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd70
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.073s
+user	0m0.020s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd80
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.097s
+user	0m0.032s
+sys	0m0.060s
+
+>hs_alt_CHM1_TR50_rd90
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.074s
+user	0m0.020s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd100
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.093s
+user	0m0.036s
+sys	0m0.056s
+
+>hs_alt_CHM1_TR50_rd110
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.075s
+user	0m0.020s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd120
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.075s
+user	0m0.012s
+sys	0m0.064s
+
+>hs_alt_CHM1_TR50_rd130
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.074s
+user	0m0.016s
+sys	0m0.060s
+
+>hs_alt_CHM1_TR50_rd140
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.092s
+user	0m0.036s
+sys	0m0.052s
+
+>hs_alt_CHM1_TR50_rd150
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.097s
+user	0m0.032s
+sys	0m0.064s
+
+>hs_alt_CHM1_TR50_rd160
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.094s
+user	0m0.048s
+sys	0m0.044s
+
+>hs_alt_CHM1_TR50_rd170
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.095s
+user	0m0.028s
+sys	0m0.064s
+
+>hs_alt_CHM1_TR50_rd180
+# reads processed: 50
+# reads with at least one reported alignment: 50 (100.00%)
+# reads that failed to align: 0 (0.00%)
+Reported 50 alignments to 1 output stream(s)
+
+real	0m0.096s
+user	0m0.032s
+sys	0m0.060s
+
+>hs_alt_CHM1_TR50_rd190
+# reads processed: 50
+# reads with at least one reported alignment: 48 (96.00%)
+# reads that failed to align: 2 (4.00%)
+Reported 48 alignments to 1 output stream(s)
+
+real	0m0.098s
+user	0m0.040s
+sys	0m0.056s
+
+>hs_alt_CHM1_TR50_rd200
+# reads processed: 50
+# reads with at least one reported alignment: 49 (98.00%)
+# reads that failed to align: 1 (2.00%)
+Reported 49 alignments to 1 output stream(s)
+
+real	0m0.074s
+user	0m0.016s
+sys	0m0.056s
+
