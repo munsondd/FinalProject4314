@@ -204,30 +204,53 @@ def traceBackPath(traceback_dictionary, max_location_dictionary, location_value_
 		traceback_word_paths[key] = internal_path
 		internal_path = []
 
-	print(traceback_word_paths)
+	#print(traceback_word_paths)
 
 	return traceback_word_paths
 
-def alignSequencesStrings(directions, seq_1, seq_2):
+def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 	# directions are taken in from top left to bottom right (in order of the sequence)
 	aligned_small_sequence = ''
 	aligned_large_genome = ''
 
-	for key in directions:
-		print(key)
+	total_aligned = {} # contains a list of lists for each aligned sequence
 
-	'''
-	for i in range(direction_path):
-		if directions[i] == 'top':
-			align1 += '-'
-		if directions[i] == 'left':
-			align1 += seq_1[count_1]
-			align2 += '-'
-		if directions[i] == 'diagonal':
-			align1 += seq_1[count_1]
-			align2 += seq_2[count_2]
-	'''
-	return (aligned_small_sequence, aligned_large_genome)
+	# alignments are populated in reverse (turns given list into a string and reverses)
+	# strings are reversed since the directions are in the reverse (populated from the end to the beginning of the string)
+	genome_string = (''.join(genome_sequence))[::-1][:-1]
+	aligner_string = (''.join(aligner_sequence))[::-1][:-1] #removes the gap unneeded preceding gap
+
+	for key in directions:
+		# start location determined by the max value
+		# position realigned for the reversed string used by the directions
+		position_align = (len(aligner_sequence)-key[0])-1 # minus one accounts for location in row/columns that start at 0
+		position_genome = (len(genome_sequence)-key[1])-1
+		align_path = directions[key]
+		
+		for i in range(len(align_path)):
+			# dynamic programming rules for the direction that a path takes
+			if align_path[i] == 'diagonal':
+				if (position_genome < len(genome_string)) or (position_align < len(aligner_string)):
+					aligned_large_genome += genome_string[position_genome]
+					aligned_small_sequence += aligner_string[position_align]
+					position_genome += 1
+					position_align += 1
+			if align_path[i] == 'top':
+				if (position_align < len(aligner_string)):
+					aligned_large_genome += '-'
+					aligned_small_sequence += aligner_string[position_align]
+					position_align += 1
+			if align_path[i] == 'left':
+				if (position_genome < len(genome_string)):
+					aligned_large_genome += genome_string[position_genome]
+					aligned_small_sequence += '-'
+					position_genome += 1
+		
+		total_aligned[key] = (aligned_small_sequence[::-1],aligned_large_genome[::-1]) # reverse strings to return to normal reading
+		aligned_small_sequence = ''
+		aligned_large_genome = ''
+	#print(total_aligned)
+	return total_aligned
 
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
@@ -244,6 +267,35 @@ def neatPrint(matrix, top_sequence, side_sequence):
 	print("\n   {0}".format("  ".join(top_sequence)))
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
+
+def printNeatAlignment(align_dictionary):
+	# print alignments for console
+	'''
+	CAT-AT--G
+	|||~||~~|
+	CATCATACG
+	'''
+	print("\n")
+	for key in align_dictionary:
+		print("Starting Location: {0}".format(key))
+		both_alignments = align_dictionary[key]
+		small_align = both_alignments[0]
+		large_genome = both_alignments[1]
+		
+		aligned_symbols = ""
+		# set up symbols between both alignments when printed
+		for i in range(len(large_genome)):
+			if (small_align[i] == large_genome[i]):
+				aligned_symbols = aligned_symbols + '|'
+			elif (small_align[i] == '-' or large_genome[i] == '-'):
+				aligned_symbols = aligned_symbols + '~'
+			elif (small_align[i] != '-' and large_genome[i] != '-') and (small_align[i] != large_genome[i]):
+				aligned_symbols = aligned_symbols + 'X'
+		
+		print(small_align)
+		print(aligned_symbols)
+		print(large_genome)
+	aligned_symbols = ''
 
 ########################################################################
 
@@ -337,7 +389,6 @@ if __name__ == '__main__':
 		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
 		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
 		
-		alignments = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-		small_sequence_aligned = alignments[0]
-		large_sequence_aligned = alignments[1]
+		alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
+		printNeatAlignment(alignment_dicts)
 		print("\n")
