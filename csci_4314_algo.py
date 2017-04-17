@@ -117,17 +117,20 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 	side_sequence = list(sequence_small_align) # breaks sequence into a list of values
 
 	column_value = len(top_sequence)
+	#print(column_value == len(zero_matrix[0]))
 	row_value = len(side_sequence)
+	#print(row_value == len(zero_matrix))
 
 	update_matrix = list(zero_matrix) # re-creates matrix so it can be updated
 
 	for row in range(1, row_value): # ignores the first column's dash
-		for column in range(1, column_value+1): # plus one to ignore the first row's dash
+		for column in range(1, column_value): # plus one to ignore the first row's dash
 
 			#print("row={0}, column{1}".format(row, column))
 			# match or mismatch for current cell
 			bases_match = False
-			if top_sequence[column-1] == side_sequence[row-1]:
+			#print("{0}{1}".format(top_sequence[column], side_sequence[row]))
+			if top_sequence[column] == side_sequence[row]:
 				current_score_index = match_score
 				bases_match = True
 			else:
@@ -137,28 +140,28 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 			top = update_matrix[row-1][column]
 			left = update_matrix[row][column-1]
 			diagonal = update_matrix[row-1][column-1]
+			#print("top: {0}+{1}, left: {2}+{1}, diagonal: {3}+{4}".format(top, gap_score, left, diagonal, current_score_index))
 
 			# update adjacent cells if the current index matches
 			diagonal += current_score_index
 			top += gap_score
 			left += gap_score
 
-			#print("top: {0}, left: {1}, diagonal: {2}".format(top, left, diagonal))
-			#print("max = {0}".format(max(0, top, left, diagonal)))
-			
+			#print("[{0},{1}], max = {2}\n".format(row, column, max(0, top, left, diagonal))
 			update_matrix[row][column] = max(0, top, left, diagonal)
-
-	for row in update_matrix:
-		print(row)
+	return update_matrix
 
 def smithWaterman(sequence_large_genome, sequence_small_align, dp_matrix):
 	# python implementation of Smith Waterman Algorithm for local alignments
 	print("smith waterman for {0}".format((sequence_large_genome, sequence_small_align)))
 
 ########################################################################
-## PRINT ALIGNMENT
-def printAlignments():
-	pass
+## PRINT ALIGNMENT, MATRIX, etc...
+def neatPrint(matrix, top_sequence, side_sequence):
+	print("\n   {0}".format("  ".join(top_sequence)))
+	for i in range(len(matrix)):
+		print("{0} {1}".format(side_sequence[i], matrix[i]))
+
 ########################################################################
 
 if __name__ == '__main__':
@@ -237,10 +240,11 @@ if __name__ == '__main__':
 		genome_to_align = '-' + genome_to_align
 
 		# width of matrix is the size of the genome, height is the size of the aligner sequence
-		zero_matrix = zeroMatrix(len(genome_to_align)+1, len(aligned_sequence))
+		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
 		print(pair)
 		#for row in zero_matrix:
 		#	print(row)
 		dp_local_matrix = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
+		neatPrint(dp_local_matrix, genome_to_align, aligned_sequence)
 		#smithWaterman(genome_to_align, aligned_sequence, dp_local_matrix)
 		print("\n")
