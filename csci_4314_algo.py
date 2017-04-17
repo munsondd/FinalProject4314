@@ -17,6 +17,7 @@
 
 import argparse # parse given flag options
 import re
+import operator # allows for itemgetter for max value in a dictionary
 '''
 scoring_matrix = {'AA':  0, 'AC': 1, 'AG':  1, 'AT': 1, 'A-': 1,
 				 'CA': 1, 'CC':  0, 'CG': 1, 'CT':  1, 'C-': 1,
@@ -110,7 +111,9 @@ def zeroMatrix(width_given, height_given):
 
 def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 	# sets up dynamic program for local alignment to fill matrix
-	print("dp local matrix for r {0}".format((sequence_large_genome, sequence_small_align)))
+	# python implementation of Smith Waterman Algorithm for local alignments
+
+	print("dp local matrix for {0}".format((sequence_large_genome, sequence_small_align)))
 	
 	# top is the top of the matrix, and side is the right hand side (location for both sequences)
 	top_sequence = list(sequence_large_genome)
@@ -123,9 +126,11 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 
 	update_matrix = list(zero_matrix) # re-creates matrix so it can be updated
 
+	traceback_dict = {} # {(row, column): ('top/left/diagonal', (row, column previous))}
+	max_dict = {} # stores the highest value found in the sequence (stores potential duplicates)
+
 	for row in range(1, row_value): # ignores the first column's dash
 		for column in range(1, column_value): # plus one to ignore the first row's dash
-
 			#print("row={0}, column{1}".format(row, column))
 			# match or mismatch for current cell
 			bases_match = False
@@ -149,15 +154,47 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 
 			#print("[{0},{1}], max = {2}\n".format(row, column, max(0, top, left, diagonal))
 			update_matrix[row][column] = max(0, top, left, diagonal)
-	return update_matrix
+			
+			# updates max_dict for all values, will remove the smallest after filled
+			max_dict[(row,column)] = update_matrix[row][column]
 
-def smithWaterman(sequence_large_genome, sequence_small_align, dp_matrix):
-	# python implementation of Smith Waterman Algorithm for local alignments
-	print("smith waterman for {0}".format((sequence_large_genome, sequence_small_align)))
+			# store the path that the cells were populated
+			if diagonal >= left and diagonal >= top:
+				traceback_dict[(row,column)] = ('diagonal', (row-1, column-1))
+			if left >= top and left > diagonal:
+				traceback_dict[(row,column)] = ('left', (row, column-1))
+			if top > left and top > diagonal:
+				traceback_dict[(row,column)] = ('top', (row-1, column))
+
+	# only return the location for the max values (allows for duplicates)
+	largest_value_in_matrix = max(max_dict.iteritems(), key=operator.itemgetter(1))[1]
+	#print(largest_value_in_matrix)
+	# can be multiple cells that contain the same value (multiple paths)
+	# example: {(3, 9): 9, (3, 12): 9}
+	final_max_dict = { k:v for k, v in max_dict.items() if v == largest_value_in_matrix }
+
+	return (update_matrix, traceback_dict, final_max_dict)
+
+def traceBackPath(traceback_dictionary, max_location_dictionary):
+	print("\ntraceback")
+	#print(traceback_dictionary)
+	#print(max_location_dictionary)
+	traceback_final_path = []
+	
+	return traceback_final_path
 
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
 def neatPrint(matrix, top_sequence, side_sequence):
+	# print with character inline, top is genome, side is sequence to be aligned
+	'''
+	dp local matrix for ('-TATAGACACATACG', '-CAT')
+		   -  T  A  T  A  G  A  C  A  C  A  T  A  C  G
+		- [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		C [0, 0, 0, 0, 0, 0, 0, 3, 2, 3, 2, 1, 0, 3, 2]
+		A [0, 0, 3, 2, 3, 2, 3, 2, 6, 5, 6, 5, 4, 3, 2]
+		T [0, 3, 2, 6, 5, 4, 3, 2, 5, 4, 5, 9, 8, 7, 6]
+	'''
 	print("\n   {0}".format("  ".join(top_sequence)))
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
@@ -244,7 +281,12 @@ if __name__ == '__main__':
 		print(pair)
 		#for row in zero_matrix:
 		#	print(row)
-		dp_local_matrix = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
+		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
+		
+		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
 		neatPrint(dp_local_matrix, genome_to_align, aligned_sequence)
-		#smithWaterman(genome_to_align, aligned_sequence, dp_local_matrix)
+		
+		traceback_dict = dp_total[1] # contains the path that populated the values
+		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		traceback_path = traceBackPath(traceback_dict, max_location_dict)
 		print("\n")
