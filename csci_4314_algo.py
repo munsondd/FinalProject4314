@@ -125,9 +125,18 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 	#print(row_value == len(zero_matrix))
 
 	update_matrix = list(zero_matrix) # re-creates matrix so it can be updated
+	max_dict = {} # stores the highest value found in the sequence (stores potential duplicates)
 
 	traceback_dict = {} # {(row, column): ('top/left/diagonal', (row, column previous))}
-	max_dict = {} # stores the highest value found in the sequence (stores potential duplicates)
+	location_value_dict = {} # stores the column/row for each value
+	
+	 # include the top row and side row (i,0), (j,0) -> stopping condition
+	for row in range(row_value):
+		location_value_dict[(row,0)] = 0
+		traceback_dict[(row,0)] = ('intial', (0,0))
+	for column in range(column_value):
+		location_value_dict[(0,column)] = 0
+		traceback_dict[(0,column)] = ('intial', (0,0))
 
 	for row in range(1, row_value): # ignores the first column's dash
 		for column in range(1, column_value): # plus one to ignore the first row's dash
@@ -156,7 +165,7 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 			update_matrix[row][column] = max(0, top, left, diagonal)
 			
 			# updates max_dict for all values, will remove the smallest after filled
-			max_dict[(row,column)] = update_matrix[row][column]
+			location_value_dict[(row,column)] = update_matrix[row][column]
 
 			# store the path that the cells were populated
 			if diagonal >= left and diagonal >= top:
@@ -167,21 +176,58 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 				traceback_dict[(row,column)] = ('top', (row-1, column))
 
 	# only return the location for the max values (allows for duplicates)
-	largest_value_in_matrix = max(max_dict.iteritems(), key=operator.itemgetter(1))[1]
+	largest_value_in_matrix = max(location_value_dict.iteritems(), key=operator.itemgetter(1))[1]
 	#print(largest_value_in_matrix)
 	# can be multiple cells that contain the same value (multiple paths)
 	# example: {(3, 9): 9, (3, 12): 9}
-	final_max_dict = { k:v for k, v in max_dict.items() if v == largest_value_in_matrix }
+	max_dict = { k:v for k, v in location_value_dict.items() if v == largest_value_in_matrix }
 
-	return (update_matrix, traceback_dict, final_max_dict)
+	return (update_matrix, traceback_dict, max_dict, location_value_dict)
 
-def traceBackPath(traceback_dictionary, max_location_dictionary):
-	print("\ntraceback")
-	#print(traceback_dictionary)
-	#print(max_location_dictionary)
-	traceback_final_path = []
-	
-	return traceback_final_path
+def traceBackPath(traceback_dictionary, max_location_dictionary, location_value_dictionary):
+	# returns a dictionary with the path and starting location for all values
+	traceback_word_paths = {} # list of lists for all paths
+	internal_path = [] # one path that will be included in the traceback above
+
+
+	for key in max_location_dictionary:
+		#print("\n\t\tKEY: {0}\n".format(key))
+		current_location = key
+		internal_path.append(traceback_dictionary[current_location][0])
+		while (location_value_dict[current_location] != 0):
+			#print(current_location)
+			#print(traceback_dictionary[current_location])
+			#print(location_value_dict[current_location])
+			current_location = traceback_dictionary[current_location][1]
+			if (traceback_dictionary[current_location][0] != 'intial'): # include full path, ignore the final 0
+				internal_path.append(traceback_dictionary[current_location][0])
+		traceback_word_paths[key] = internal_path
+		internal_path = []
+
+	print(traceback_word_paths)
+
+	return traceback_word_paths
+
+def alignSequencesStrings(directions, seq_1, seq_2):
+	# directions are taken in from top left to bottom right (in order of the sequence)
+	aligned_small_sequence = ''
+	aligned_large_genome = ''
+
+	for key in directions:
+		print(key)
+
+	'''
+	for i in range(direction_path):
+		if directions[i] == 'top':
+			align1 += '-'
+		if directions[i] == 'left':
+			align1 += seq_1[count_1]
+			align2 += '-'
+		if directions[i] == 'diagonal':
+			align1 += seq_1[count_1]
+			align2 += seq_2[count_2]
+	'''
+	return (aligned_small_sequence, aligned_large_genome)
 
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
@@ -288,5 +334,10 @@ if __name__ == '__main__':
 		
 		traceback_dict = dp_total[1] # contains the path that populated the values
 		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
-		traceback_path = traceBackPath(traceback_dict, max_location_dict)
+		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
+		
+		alignments = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
+		small_sequence_aligned = alignments[0]
+		large_sequence_aligned = alignments[1]
 		print("\n")
