@@ -92,6 +92,13 @@ def seqDictPairs(header_list, sequence_list):
 	return seq_gen_dict
 
 ########################################################################
+## CHECKS IF IT EXISTS EXACTLY (for optimizing)
+def checkExists(align_seq, genome_seq):
+	# return true/false if the expected sequence exists exactly (no gaps required)
+	# returns (true/false, # of times it appears (default=0), index if it only appears once (default=None)
+	pass
+
+########################################################################
 ## CREATE MATRICES FOR LOCAL ALIGNMENT's DYNAMIC PROGRAMMING
 
 def orderedPairs(align_dict, genome_seq):
@@ -113,7 +120,7 @@ def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
 	# sets up dynamic program for local alignment to fill matrix
 	# python implementation of Smith Waterman Algorithm for local alignments
 
-	print("dp local matrix for {0}".format((sequence_large_genome, sequence_small_align)))
+	#print("dp local matrix for {0}".format((sequence_large_genome, sequence_small_align)))
 	
 	# top is the top of the matrix, and side is the right hand side (location for both sequences)
 	top_sequence = list(sequence_large_genome)
@@ -205,7 +212,6 @@ def traceBackPath(traceback_dictionary, max_location_dictionary, location_value_
 		internal_path = []
 
 	#print(traceback_word_paths)
-
 	return traceback_word_paths
 
 def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
@@ -254,7 +260,7 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
-def neatPrint(matrix, top_sequence, side_sequence):
+def neatPrintMatrix(matrix, top_sequence, side_sequence):
 	# print with character inline, top is genome, side is sequence to be aligned
 	'''
 	dp local matrix for ('-TATAGACACATACG', '-CAT')
@@ -268,34 +274,98 @@ def neatPrint(matrix, top_sequence, side_sequence):
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
 
-def printNeatAlignment(align_dictionary):
+def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name):
 	# print alignments for console
 	'''
-	CAT-AT--G
-	|||~||~~|
-	CATCATACG
+	####################################################################
+	Genome File: <genome_filename>
+	Genome Seq:  <genome_name>
+	Align Seq:   <aligner_sequence_name>
+
+	Genome Seq Length: <length of genome>
+	Total matches found: <total times the sequence appears>
+	
+	<genome_name> csci4314 match <start> <end> 100. + . ID=<#>
+			CAT-AT--GGGA
+			|||~||~~|
+	  TATAGACATCATACG
+	...
+	####################################################################
 	'''
-	print("\n")
+	print("####################################################################")
+	print("Genome File: {0}".format(genome_filename))
+	print("Genome Seq:  {0}".format(genome_name))
+	print("Align Seq:   {0}".format(align_name))
+	print("\nGenome Seq Length: {0}".format(len(genome_sequence)))
+	print("Total matches found: {0}\n".format(len(align_dictionary.keys()))) # total number of times a sequence appears
+
+
+	aligner_sequence = aligner_sequence[1:] # remove preceding gapping done for sequence alignment
+	genome_sequence = genome_sequence[1:]
+	
+	id_counter = 1 # keeps track for printing the id value for each found value
+
 	for key in align_dictionary:
-		print("Starting Location: {0}".format(key))
+
 		both_alignments = align_dictionary[key]
 		small_align = both_alignments[0]
 		large_genome = both_alignments[1]
+
+		#print("Starting Location: {0}".format(key))
+		print("{0}  csci4314  match  {1}  {2}  100.  +  .  ID={3}\n".format(genome_name, key[1]-len(large_genome), key[1], id_counter))
+		id_counter += 1
 		
-		aligned_symbols = ""
+		symbols = ""
 		# set up symbols between both alignments when printed
 		for i in range(len(large_genome)):
 			if (small_align[i] == large_genome[i]):
-				aligned_symbols = aligned_symbols + '|'
+				symbols = symbols + '|'
 			elif (small_align[i] == '-' or large_genome[i] == '-'):
-				aligned_symbols = aligned_symbols + '~'
+				symbols = symbols + '~'
 			elif (small_align[i] != '-' and large_genome[i] != '-') and (small_align[i] != large_genome[i]):
-				aligned_symbols = aligned_symbols + 'X'
+				symbols = symbols + 'X'
+
+		'''
+		print("\nAlignment Sequence Only:")
+		print("small_align_: {0}".format(small_align))
+		print("              {0}".format(symbols))
+		print("large_genome: {0}".format(large_genome))
+		Example:
+		small_align_: CAT-AT--G
+              |||~||~~|
+		large_genome: CATCATACG
+		When the full looks like: 'TATAGACATCATACG', 'CATATGGGA'
+		'''
+
+		# PRINT FULL SEQUENCE
+		aligned_start_position = max(0, key[0] - len(small_align)) # produces a non-negative range
+		aligned_end_position = aligned_start_position + len(small_align.replace('-', ''))
+		#print(range(aligned_start_position, aligned_end_position))
+
+		updated_aligner_sequence = ''
+		updated_aligner_sequence = aligner_sequence[0:aligned_start_position] + small_align + aligner_sequence[aligned_end_position:]
+		#updated_aligner_sequence = aligner_sequence[0:aligned_start_position] + '^' + small_align + '^' + aligner_sequence[aligned_end_position:]
+		# uses '^' to seperate sequences for easier reading
+		#print("updated_aligner: {0}\n".format(updated_aligner_sequence))
 		
-		print(small_align)
-		print(aligned_symbols)
-		print(large_genome)
-	aligned_symbols = ''
+		genome_start_position = max(0, key[1] - len(large_genome))
+		genome_end_position = genome_start_position + len(large_genome.replace('-', ''))
+		#print(range(genome_start_position, genome_end_position))
+
+		updated_genome_sequence = ''
+		updated_genome_sequence = genome_sequence[0:genome_start_position] + large_genome + genome_sequence[genome_end_position:]
+		#updated_genome_sequence = genome_sequence[0:genome_start_position] + '^' + large_genome + '^' + genome_sequence[genome_end_position:]
+		#print("updated_genome_: {0}".format(updated_genome_sequence))
+
+		spaces =  ' '*max(aligned_start_position, genome_start_position) # + ' ' # aligns the empty spaces to line up sequences on print console
+		# plus one accounts for the use of '^' in the print statement if used
+
+
+		#print("\nFull Sequence Display:")
+		print("  {0}{1}".format(spaces, updated_aligner_sequence))
+		print("  {0}{1}".format(spaces, symbols))
+		print("  {0}\n".format(updated_genome_sequence))
+	print("####################################################################")
 
 ########################################################################
 
@@ -373,22 +443,20 @@ if __name__ == '__main__':
 		# add gap value at the start of both sequences
 		aligned_sequence = '-' + aligned_sequence
 		genome_to_align = '-' + genome_to_align
-
 		# width of matrix is the size of the genome, height is the size of the aligner sequence
 		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
-		print(pair)
-		#for row in zero_matrix:
-		#	print(row)
+
 		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
 		
 		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
-		neatPrint(dp_local_matrix, genome_to_align, aligned_sequence)
 		
+		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
+
 		traceback_dict = dp_total[1] # contains the path that populated the values
 		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
 		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
 		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
 		
 		alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-		printNeatAlignment(alignment_dicts)
+		printNeatAlignment(alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
 		print("\n")
