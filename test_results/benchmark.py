@@ -52,5 +52,20 @@ for filename in os.listdir(directory):
                 false_positives += 1
                 # print "true: " + str(bowtie_position) + " low: " +str(shift_down) + " high: " + str(shift_up) + " predicted: " + str(bowtie_position)
         false_negatives = TR - hits
+
+        #calculating precision and recall
+        precision = 0
+        recall = 0
+        if true_positives + false_positives != 0:
+            precision = float(true_positives)/float((true_positives + false_positives))
+        if true_positives + false_negatives != 0:
+            recall = float(true_positives)/float((true_positives + false_negatives))
+        #calculating f_value
+        f_value = 0
+        if recall + precision != 0:
+            f_value = (2* recall * precision)/ (recall + precision)
+
+
         print ">" + filename
         print "true positives: " + str(true_positives) + " false positives: " + str(false_positives) + " false negatives: " + str(false_negatives)
+        print "precision: " + str(precision) + " recall: " + str(recall) + " f value: " + str(f_value)
