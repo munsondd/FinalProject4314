@@ -8,7 +8,8 @@ TR = 50
 #specify standard deviation for accepted alignments
 SD = .1
 rd_list = []
-tp_list =[]
+tp_list = []
+fp_list = []
 # loop through each file in directory
 for filename in os.listdir(directory):
     #counter for successfully matches
@@ -57,12 +58,12 @@ for filename in os.listdir(directory):
         false_negatives = TR - hits
         # update plot data
         rd_list.append(float(rd))
-        tp_list.append(float(true_positives))
+        tp_list.append(float(true_positives) * 2)
 
         print ">" + filename
         print "true positives: " + str(true_positives) + " false positives: " + str(false_positives) + " false negatives: " + str(false_negatives)
 plt.plot(rd_list, tp_list, 'ro')
-plt.axis([0, 200, -5, 55])
-plt.ylabel('true positives')
+plt.axis([0, 200, -5, 100])
+plt.ylabel('true positives %')
 plt.xlabel('read length')
 plt.show()
