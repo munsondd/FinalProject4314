@@ -296,7 +296,7 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 	print("Genome File: {0}".format(genome_filename))
 	print("Genome Seq:  {0}".format(genome_name))
 	print("Align Seq:   {0}".format(align_name))
-	print("\nGenome Seq Length: {0}".format(len(genome_sequence)))
+	print("\nGenome Seq Length: {0}".format(len(genome_sequence)-1))
 	print("Total matches found: {0}\n".format(len(align_dictionary.keys()))) # total number of times a sequence appears
 
 
@@ -312,7 +312,7 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 		large_genome = both_alignments[1]
 
 		#print("Starting Location: {0}".format(key))
-		print("{0}  csci4314  match  {1}  {2}  100.  +  .  ID={3}\n".format(genome_name, key[1]-len(large_genome), key[1], id_counter))
+		print("{0}  csci4314  match  {1}  {2}  100.  +  .  ID={3}\n".format(genome_name, key[1]-len(large_genome)+1, key[1], id_counter))
 		id_counter += 1
 		
 		symbols = ""
