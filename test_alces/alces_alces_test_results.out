@@ -1,0 +1,81 @@
+>alces_alces_TR50_rd10.fq
+true positives: 47 false positives: 3 false negatives: 0
+precision: 0.94 recall: 1.0 f value: 0.969072164948
+>alces_alces_TR50_rd20.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd30.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd40.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd50.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd60.fq
+true positives: 49 false positives: 1 false negatives: 0
+precision: 0.98 recall: 1.0 f value: 0.989898989899
+>alces_alces_TR50_rd70.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd80.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd90.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd100.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd110.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd120.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd130.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd140.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd150.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd160.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd170.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd180.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd190.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+>alces_alces_TR50_rd200.fq
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+bp	tp	fp	fn	f value
+10	94	6	0	0.969072164948
+20	100	0	0	1.0
+30	100	0	0	1.0
+40	100	0	0	1.0
+50	100	0	0	1.0
+60	98	2	0	0.989898989899
+70	100	0	0	1.0
+80	100	0	0	1.0
+90	100	0	0	1.0
+100	100	0	0	1.0
+110	100	0	0	1.0
+120	100	0	0	1.0
+130	100	0	0	1.0
+140	100	0	0	1.0
+150	100	0	0	1.0
+160	100	0	0	1.0
+170	100	0	0	1.0
+180	100	0	0	1.0
+190	100	0	0	1.0
+200	100	0	0	1.0
