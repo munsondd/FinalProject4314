@@ -6,7 +6,7 @@ directory = "../test_results"
 TR = 50
 #specify standard deviation for accepted alignments
 SD = .1
-
+tableset = []
 # loop through each file in directory
 for filename in os.listdir(directory):
     #counter for successfully matches
@@ -64,8 +64,12 @@ for filename in os.listdir(directory):
         f_value = 0
         if recall + precision != 0:
             f_value = (2* recall * precision)/ (recall + precision)
-
+        tableset.append((rd,true_positives*2,false_positives*2,false_negatives*2,f_value))
 
         print ">" + filename
         print "true positives: " + str(true_positives) + " false positives: " + str(false_positives) + " false negatives: " + str(false_negatives)
         print "precision: " + str(precision) + " recall: " + str(recall) + " f value: " + str(f_value)
+tableset = sorted(tableset)
+print "bp\ttp\tfp\tfn\tf value"
+for row in tableset:
+    print str(row[0]) + "\t" + str(row[1]) + "\t" + str(row[2]) +"\t" + str(row[3]) + "\t" + str(row[4])
