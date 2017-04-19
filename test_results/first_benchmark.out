@@ -1,0 +1,81 @@
+>hs_alt_CHM1_TR50_rd140.fq
+true positives: 23 false positives: 26 false negatives: 1
+precision: 0.469387755102 recall: 0.958333333333 f value: 0.630136986301
+>hs_alt_CHM1_TR50_rd190.fq
+true positives: 28 false positives: 20 false negatives: 2
+precision: 0.583333333333 recall: 0.933333333333 f value: 0.717948717949
+>hs_alt_CHM1_TR50_rd200.fq
+true positives: 27 false positives: 22 false negatives: 1
+precision: 0.551020408163 recall: 0.964285714286 f value: 0.701298701299
+>hs_alt_CHM1_TR50_rd60.fq
+true positives: 46 false positives: 3 false negatives: 1
+precision: 0.938775510204 recall: 0.978723404255 f value: 0.958333333333
+>hs_alt_CHM1_TR50_rd120.fq
+true positives: 25 false positives: 24 false negatives: 1
+precision: 0.510204081633 recall: 0.961538461538 f value: 0.666666666667
+>hs_alt_CHM1_TR50_rd180.fq
+true positives: 31 false positives: 19 false negatives: 0
+precision: 0.62 recall: 1.0 f value: 0.765432098765
+>hs_alt_CHM1_TR50_rd80.fq
+true positives: 28 false positives: 21 false negatives: 1
+precision: 0.571428571429 recall: 0.965517241379 f value: 0.717948717949
+>hs_alt_CHM1_TR50_rd170.fq
+true positives: 20 false positives: 30 false negatives: 0
+precision: 0.4 recall: 1.0 f value: 0.571428571429
+>hs_alt_CHM1_TR50_rd90.fq
+true positives: 26 false positives: 24 false negatives: 0
+precision: 0.52 recall: 1.0 f value: 0.684210526316
+>hs_alt_CHM1_TR50_rd160.fq
+true positives: 24 false positives: 26 false negatives: 0
+precision: 0.48 recall: 1.0 f value: 0.648648648649
+>hs_alt_CHM1_TR50_rd150.fq
+true positives: 31 false positives: 19 false negatives: 0
+precision: 0.62 recall: 1.0 f value: 0.765432098765
+>hs_alt_CHM1_TR50_rd50.fq
+true positives: 46 false positives: 4 false negatives: 0
+precision: 0.92 recall: 1.0 f value: 0.958333333333
+>hs_alt_CHM1_TR50_rd20.fq
+true positives: 42 false positives: 8 false negatives: 0
+precision: 0.84 recall: 1.0 f value: 0.913043478261
+>hs_alt_CHM1_TR50_rd10.fq
+true positives: 0 false positives: 50 false negatives: 0
+precision: 0.0 recall: 0 f value: 0
+>hs_alt_CHM1_TR50_rd30.fq
+true positives: 48 false positives: 1 false negatives: 1
+precision: 0.979591836735 recall: 0.979591836735 f value: 0.979591836735
+>hs_alt_CHM1_TR50_rd110.fq
+true positives: 25 false positives: 25 false negatives: 0
+precision: 0.5 recall: 1.0 f value: 0.666666666667
+>hs_alt_CHM1_TR50_rd130.fq
+true positives: 22 false positives: 28 false negatives: 0
+precision: 0.44 recall: 1.0 f value: 0.611111111111
+>hs_alt_CHM1_TR50_rd40.fq
+true positives: 46 false positives: 3 false negatives: 1
+precision: 0.938775510204 recall: 0.978723404255 f value: 0.958333333333
+>hs_alt_CHM1_TR50_rd70.fq
+true positives: 25 false positives: 25 false negatives: 0
+precision: 0.5 recall: 1.0 f value: 0.666666666667
+>hs_alt_CHM1_TR50_rd100.fq
+true positives: 21 false positives: 28 false negatives: 1
+precision: 0.428571428571 recall: 0.954545454545 f value: 0.591549295775
+bp	tp	fp	fn	f value
+10	0	100	0	0
+20	84	16	0	0.913043478261
+30	96	2	2	0.979591836735
+40	92	6	2	0.958333333333
+50	92	8	0	0.958333333333
+60	92	6	2	0.958333333333
+70	50	50	0	0.666666666667
+80	56	42	2	0.717948717949
+90	52	48	0	0.684210526316
+100	42	56	2	0.591549295775
+110	50	50	0	0.666666666667
+120	50	48	2	0.666666666667
+130	44	56	0	0.611111111111
+140	46	52	2	0.630136986301
+150	62	38	0	0.765432098765
+160	48	52	0	0.648648648649
+170	40	60	0	0.571428571429
+180	62	38	0	0.765432098765
+190	56	40	4	0.717948717949
+200	54	44	2	0.701298701299

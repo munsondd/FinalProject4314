@@ -3,7 +3,27 @@
  1. Download repo
  2. Requires python:  
  ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta```
+ #### Example Output
+ ```
+ Genome File: genome_example.fasta
+Genome Seq:  GEN_0
+Align Seq:   SEQ_0
 
+Genome Seq Length: 16
+Total matches found: 1
+
+GEN_0  csci4314  match  -1  8  100.  +  .  ID=1
+ATGAGGAGA
+||~|~||X|
+AT-A-GACAATCATACG
+
+ ```
+ Legend: 
+ ```
+ '|' = match
+ '~' = gap
+ 'X' = mismatch
+ ```
 
 ### interpret bowtie results
 
