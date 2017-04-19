@@ -64,6 +64,6 @@ for filename in os.listdir(directory):
         print "true positives: " + str(true_positives) + " false positives: " + str(false_positives) + " false negatives: " + str(false_negatives)
 plt.plot(rd_list, tp_list, 'ro')
 plt.axis([0, 200, -5, 100])
-plt.ylabel('true positives %')
+plt.ylabel('accuracy')
 plt.xlabel('read length')
 plt.show()
