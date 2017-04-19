@@ -268,14 +268,17 @@ def neatPrint(matrix, top_sequence, side_sequence):
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
 
-def printNeatAlignment(align_dictionary):
+def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence):
 	# print alignments for console
 	'''
 	CAT-AT--G
 	|||~||~~|
 	CATCATACG
 	'''
+	aligner_sequence = aligner_sequence[1:] # remove artifical gap at the beginning of sequence
+	genome_sequence = genome_sequence[1:]
 	print("\n")
+
 	for key in align_dictionary:
 		print("Starting Location: {0}".format(key))
 		both_alignments = align_dictionary[key]
@@ -291,11 +294,58 @@ def printNeatAlignment(align_dictionary):
 				aligned_symbols = aligned_symbols + '~'
 			elif (small_align[i] != '-' and large_genome[i] != '-') and (small_align[i] != large_genome[i]):
 				aligned_symbols = aligned_symbols + 'X'
+
+		aligned_start_position = max(0, key[0] - len(small_align)) # non-negative values
+		print("len(small_align) = {0}".format(len(small_align)))
+		aligned_end_position = aligned_start_position + len(small_align)
+		aligned_range = range(aligned_start_position, aligned_end_position)
+
+		updated_aligner_sequence = ''
+		already_added = False
+
+		for i in range(len(aligner_sequence)):
+			if i in aligned_range:
+				if not already_added:
+					updated_aligner_sequence += '^'
+					updated_aligner_sequence += small_align # adds the entire string at once (avoids duplicates with already_added)
+					updated_aligner_sequence += '^'
+					i +=  len(small_align.replace('-', "")) # skip over the elements that are covered by the aligned
+					already_added = True # only adds the small_align once for the range that it appears
+			else:
+				updated_aligner_sequence += aligner_sequence[i]
 		
-		print(small_align)
-		print(aligned_symbols)
-		print(large_genome)
+		genome_start_position = max(0, key[1] - len(large_genome))
+		print("len(large_genome) = {0}".format(len(large_genome)))
+		genome_end_position = genome_start_position + len(large_genome)
+		genome_range = range(genome_start_position, genome_end_position)
+
+		updated_genome_sequence = ''
+		already_added = False
+		for i in range(len(genome_sequence)):
+			if i in genome_range:
+				if not already_added:
+					updated_genome_sequence += '^'
+					updated_genome_sequence += large_genome
+					updated_genome_sequence += '^'
+					i +=  len(large_genome.replace('-', "")) 
+					already_added = True
+			else:
+				updated_genome_sequence += genome_sequence[i]
+
+
+		print("\taligner_sequence: {0}, range: {1}".format(aligner_sequence, aligned_range))
+		print("\tgenome_sequence: {0}, range: {1}".format(genome_sequence, genome_range))
+		
+		print("alignments only:")
+		print("aligner: {0}".format(small_align))
+		#print(aligned_symbols)
+		print("genome_: {0}".format(large_genome))
+		print("\ntotal alignments:")
+		print("aligner: {0}".format(updated_aligner_sequence))
+		print("genome_: {0}\n".format(updated_genome_sequence))
 	aligned_symbols = ''
+	updated_aligner_sequence = ''
+	updated_genome_sequence = ''
 
 ########################################################################
 
@@ -390,5 +440,5 @@ if __name__ == '__main__':
 		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
 		
 		alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-		printNeatAlignment(alignment_dicts)
+		printNeatAlignment(alignment_dicts, genome_to_align, aligned_sequence)
 		print("\n")
