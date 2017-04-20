@@ -7,7 +7,7 @@
     # Compares a list of small sequences to one large genome and returns all alignments
     # Finds local regions with the highest levels of conservation/similarity
 
-    # Psuedo-Code:
+    # Psuedo-Code: Updated version of the Smith Waterman algorithm
     
     # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename>
 	# Sequence file: File that contains all large genomes that will be aligned against
@@ -18,24 +18,10 @@
 import argparse # parse given flag options
 import re
 import operator # allows for itemgetter for max value in a dictionary
-'''
-scoring_matrix = {'AA':  0, 'AC': 1, 'AG':  1, 'AT': 1, 'A-': 1,
-				 'CA': 1, 'CC':  0, 'CG': 1, 'CT':  1, 'C-': 1,
-				 'GA':  1, 'GC': 1, 'GG':  0, 'GT': 1, 'G-': 1,
-				 'TA': 1, 'TC':  1, 'TG': 1, 'TT':  0, 'T-': 1,
-				 '-A': 1, '-C': 1, '-G': 1, '-T': 1, '--': 1}
-'''
-match_score = 3
-mismatch_score = -2
-gap_score = -1
 
-'''
-scoring_matrix = {'AA':  0, 'AC': 1, 'AG':  1, 'AT': 1, 'A-': 1,
-				 'CA': 1, 'CC':  0, 'CG': 1, 'CT':  1, 'C-': 1,
-				 'GA':  1, 'GC': 1, 'GG':  0, 'GT': 1, 'G-': 1,
-				 'TA': 1, 'TC':  1, 'TG': 1, 'TT':  0, 'T-': 1,
-				 '-A': 1, '-C': 1, '-G': 1, '-T': 1, '--': 1}
-'''
+match_score = 3
+mismatch_score = -2 #-.2 # allows for mismatches in 20% of the sequence
+gap_score = -1
 
 ########################################################################
 ## SETTING UP THE DICTIONARIES FROM THE GIVEN FILES
@@ -312,7 +298,7 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 		large_genome = both_alignments[1]
 
 		#print("Starting Location: {0}".format(key))
-		print("{0}  csci4314  match  {1}  {2}  100.  +  .  ID={3}\n".format(genome_name, key[1]-len(large_genome)+1, key[1], id_counter))
+		print("{0}  csci4314  match ID={1}  {2}  {3}  100.  +  .".format(genome_name, id_counter, key[1]-len(large_genome)+1, key[1]))
 		id_counter += 1
 		
 		symbols = ""
@@ -327,9 +313,9 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 
 		'''
 		print("\nAlignment Sequence Only:")
-		print("small_align_: {0}".format(small_align))
-		print("              {0}".format(symbols))
-		print("large_genome: {0}".format(large_genome))
+		#print("small_align_: {0}".format(small_align))
+		#print("              {0}".format(symbols))
+		#print("large_genome: {0}".format(large_genome))
 		Example:
 		small_align_: CAT-AT--G
               |||~||~~|
@@ -362,9 +348,9 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 
 
 		#print("\nFull Sequence Display:")
-		print("  {0}{1}".format(spaces, updated_aligner_sequence))
-		print("  {0}{1}".format(spaces, symbols))
-		print("  {0}\n".format(updated_genome_sequence))
+		#print("  {0}{1}".format(spaces, updated_aligner_sequence))
+		#print("  {0}{1}".format(spaces, symbols))
+		#print("  {0}\n".format(updated_genome_sequence))
 	print("####################################################################")
 
 ########################################################################
