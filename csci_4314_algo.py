@@ -20,7 +20,7 @@ import re
 import operator # allows for itemgetter for max value in a dictionary
 
 match_score = 3
-mismatch_score = -2 #-.2 # allows for mismatches in 20% of the sequence
+#mismatch_score = -2 #TODO: allows for mismatches in 20% of the sequence
 gap_score = -1
 
 ########################################################################
@@ -102,7 +102,7 @@ def zeroMatrix(width_given, height_given):
 	matrix = [[0 for x in range(width)] for y in range(height)]
 	return matrix
 
-def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix):
+def DPlocalMatrix(sequence_large_genome, sequence_small_align, zero_matrix, mismatch_score):
 	# sets up dynamic program for local alignment to fill matrix
 	# python implementation of Smith Waterman Algorithm for local alignments
 
@@ -218,7 +218,7 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 		position_align = (len(aligner_sequence)-key[0])-1 # minus one accounts for location in row/columns that start at 0
 		position_genome = (len(genome_sequence)-key[1])-1
 		align_path = directions[key]
-		
+
 		for i in range(len(align_path)):
 			# dynamic programming rules for the direction that a path takes
 			if align_path[i] == 'diagonal':
@@ -239,11 +239,11 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 					position_genome += 1
 		
 		total_aligned[key] = (aligned_small_sequence[::-1],aligned_large_genome[::-1]) # reverse strings to return to normal reading
+		#print("small: {0}, large: {1}".format(aligned_small_sequence[::-1], aligned_large_genome[::-1]))
 		aligned_small_sequence = ''
 		aligned_large_genome = ''
 	#print(total_aligned)
 	return total_aligned
-
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
 def neatPrintMatrix(matrix, top_sequence, side_sequence):
@@ -260,7 +260,7 @@ def neatPrintMatrix(matrix, top_sequence, side_sequence):
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
 
-def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name):
+def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name):
 	# print alignments for console
 	'''
 	####################################################################
@@ -278,29 +278,28 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 	...
 	####################################################################
 	'''
+	# combine low/high confidence dictionaries into one that can be iterated through
+	total_updated_dictionary = dict(high_align_dictionary)
+	total_updated_dictionary.update(low_align_dictionary)
+	
 	print("####################################################################")
 	print("Genome File: {0}".format(genome_filename))
 	print("Genome Seq:  {0}".format(genome_name))
 	print("Align Seq:   {0}".format(align_name))
 	print("\nGenome Seq Length: {0}".format(len(genome_sequence)-1))
-	print("Total matches found: {0}\n".format(len(align_dictionary.keys()))) # total number of times a sequence appears
-
+	print("Total matches found: {0}\n".format(len(total_updated_dictionary.keys()))) # total number of times a sequence appears
 
 	aligner_sequence = aligner_sequence[1:] # remove preceding gapping done for sequence alignment
 	genome_sequence = genome_sequence[1:]
-	
+
 	id_counter = 1 # keeps track for printing the id value for each found value
 
-	for key in align_dictionary:
+	for key in total_updated_dictionary:
 
-		both_alignments = align_dictionary[key]
+		both_alignments = total_updated_dictionary[key]
 		small_align = both_alignments[0]
 		large_genome = both_alignments[1]
 
-		#print("Starting Location: {0}".format(key))
-		print("{0}  csci4314  match ID={1}  {2}  {3}  100.  +  .".format(genome_name, id_counter, key[1]-len(large_genome)+1, key[1]))
-		id_counter += 1
-		
 		symbols = ""
 		# set up symbols between both alignments when printed
 		for i in range(len(large_genome)):
@@ -310,6 +309,12 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 				symbols = symbols + '~'
 			elif (small_align[i] != '-' and large_genome[i] != '-') and (small_align[i] != large_genome[i]):
 				symbols = symbols + 'X'
+
+		#print("Starting Location: {0}".format(key))
+		percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
+		#print("{0} - {1} = {2}/{3} = {4}".format(len(large_genome), symbols.count('X'), len(large_genome)-symbols.count('X'), len(large_genome), percent_match))
+		print("{0}  csci4314  match  {1:.2f}  ID={2}  +  {3}  {4}".format(genome_name, percent_match, id_counter,  key[1]-len(large_genome)+1, key[1]))
+		id_counter += 1
 
 		'''
 		print("\nAlignment Sequence Only:")
@@ -323,7 +328,7 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 		When the full looks like: 'TATAGACATCATACG', 'CATATGGGA'
 		'''
 
-		# PRINT FULL SEQUENCE
+		#### PRINT FULL SEQUENCE
 		aligned_start_position = max(0, key[0] - len(small_align)) # produces a non-negative range
 		aligned_end_position = aligned_start_position + len(small_align.replace('-', ''))
 		#print(range(aligned_start_position, aligned_end_position))
@@ -347,10 +352,10 @@ def printNeatAlignment(align_dictionary, genome_sequence, aligner_sequence, geno
 		# plus one accounts for the use of '^' in the print statement if used
 
 
-		#print("\nFull Sequence Display:")
-		#print("  {0}{1}".format(spaces, updated_aligner_sequence))
-		#print("  {0}{1}".format(spaces, symbols))
-		#print("  {0}\n".format(updated_genome_sequence))
+		print("\nFull Sequence Display:")
+		print("  {0}{1}".format(spaces, updated_aligner_sequence))
+		print("  {0}{1}".format(spaces, symbols))
+		print("  {0}\n".format(updated_genome_sequence))
 	print("####################################################################")
 
 ########################################################################
@@ -418,8 +423,10 @@ if __name__ == '__main__':
 
 	# creates a zero matrix for each aligned sequences compared to the larger genome
 	for pair in paired_seq:
+		#print(pair)
 		aligned_sequence = small_align_dict[pair[0]]
 		genome_to_align = large_genome_dict[pair[1]]
+		#print("aligned_sequence: {0}, genome: {1}".format(aligned_sequence, genome_to_align))
 		
 		# if the smaller aligning sequence is greater than the genome, exit
 		if len(aligned_sequence) > len(genome_to_align):
@@ -432,10 +439,11 @@ if __name__ == '__main__':
 		# width of matrix is the size of the genome, height is the size of the aligner sequence
 		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
 
-		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix)
+		high_confidence_mismatch_score = -2 # limits the amount of mismatches
+
+		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, high_confidence_mismatch_score)
 		
 		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
-		
 		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
 
 		traceback_dict = dp_total[1] # contains the path that populated the values
@@ -443,6 +451,23 @@ if __name__ == '__main__':
 		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
 		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
 		
-		alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-		printNeatAlignment(alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
+		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
+		print("high confidence locations: ")
+		print(high_confidence_alignment_dicts)
+
+		# set up the range for high and low confidence based on found values
+		low_confidence_mismatch_score = 2 # expand total mismatches
+		low_dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, low_confidence_mismatch_score)
+
+		low_dp_local_matrix = low_dp_total[0] # the matrix produced by the dynamic program
+		low_traceback_dict = low_dp_total[1] # contains the path that populated the values
+		low_max_location_dict = low_dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		low_location_value_dict = low_dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+
+		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
+		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
+		print("low confidence locations: ")
+		print(low_confidence_alignment_dicts)
+		printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
+		
 		print("\n")
