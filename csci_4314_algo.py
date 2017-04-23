@@ -260,6 +260,34 @@ def neatPrintMatrix(matrix, top_sequence, side_sequence):
 	for i in range(len(matrix)):
 		print("{0} {1}".format(side_sequence[i], matrix[i]))
 
+def findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence):
+	# find range of values that contain the sequence in a variety of confidences
+	# high confidence: exact match is found (could be found in multiple locations across the genome for a larger range than sequence length)
+	# low confidence: no exact matches were found (range includes mismatches)
+	dict_min_range_low = min([int(i[1]) for i in high_align_dictionary.keys()])
+	dict_max_range_low = max([int(i[1]) for i in high_align_dictionary.keys()])
+	dict_seq_length = max([len(i[1]) for i in high_align_dictionary.values()])
+
+	if high_align_dictionary == low_align_dictionary:
+		print("exact match found")
+		print("HIGH CONFIDENCE RANGE: Between {0} to {1}".format(dict_min_range_low-dict_seq_length+1, dict_max_range_low))
+	else:
+		min_range_low = min([int(i[1]) for i in low_align_dictionary.keys()])
+		min_range_high = min([int(i[1]) for i in high_align_dictionary.keys()])
+		min_range = min(min_range_low, min_range_high)
+		
+		max_range_low = max([int(i[1]) for i in low_align_dictionary.keys()])
+		max_range_high = max([int(i[1]) for i in high_align_dictionary.keys()])
+		max_range = max(max_range_low, max_range_high)
+		
+		seq_length_low = max([len(i[1]) for i in low_align_dictionary.values()])
+		seq_length_high = max([len(i[1]) for i in high_align_dictionary.values()])
+		max_seq_length = max(seq_length_low, seq_length_high)
+		print("no exact match found")
+		print("HIGH CONFIDENCE RANGE: Between {0} to {1}".format(dict_min_range_low-dict_seq_length+1, dict_max_range_low))
+		print("LOW  CONFIDENCE RANGE: Between {0} to {1}".format(max_seq_length-min_range, max_range))
+	print("\n")
+
 def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name):
 	# print alignments for console
 	'''
@@ -289,6 +317,8 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	print("\nGenome Seq Length: {0}".format(len(genome_sequence)-1))
 	print("Total matches found: {0}\n".format(len(total_updated_dictionary.keys()))) # total number of times a sequence appears
 
+	findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence) # print range of confidences
+	
 	aligner_sequence = aligner_sequence[1:] # remove preceding gapping done for sequence alignment
 	genome_sequence = genome_sequence[1:]
 
@@ -351,11 +381,12 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		spaces =  ' '*max(aligned_start_position, genome_start_position) # + ' ' # aligns the empty spaces to line up sequences on print console
 		# plus one accounts for the use of '^' in the print statement if used
 
-
+		'''
 		print("\nFull Sequence Display:")
 		print("  {0}{1}".format(spaces, updated_aligner_sequence))
 		print("  {0}{1}".format(spaces, symbols))
 		print("  {0}\n".format(updated_genome_sequence))
+		'''
 	print("####################################################################")
 
 ########################################################################
@@ -450,10 +481,7 @@ if __name__ == '__main__':
 		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
 		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
 		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
-		
 		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-		print("high confidence locations: ")
-		print(high_confidence_alignment_dicts)
 
 		# set up the range for high and low confidence based on found values
 		low_confidence_mismatch_score = 2 # expand total mismatches
@@ -466,8 +494,6 @@ if __name__ == '__main__':
 
 		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
 		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
-		print("low confidence locations: ")
-		print(low_confidence_alignment_dicts)
 		printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
 		
 		print("\n")
