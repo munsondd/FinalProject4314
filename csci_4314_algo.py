@@ -269,7 +269,10 @@ def findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequ
 	dict_seq_length = max([len(i[1]) for i in high_align_dictionary.values()])
 
 	if high_align_dictionary == low_align_dictionary:
-		print("exact match found")
+		match_es = 'match'
+		if (len(high_align_dictionary.values()) != 1):
+			match_es = 'matches'
+		print("exact {0} found").format(match_es)
 		print("HIGH CONFIDENCE RANGE: Between {0} to {1}".format(dict_min_range_low-dict_seq_length+1, dict_max_range_low))
 	else:
 		min_range_low = min([int(i[1]) for i in low_align_dictionary.keys()])
@@ -283,7 +286,7 @@ def findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequ
 		seq_length_low = max([len(i[1]) for i in low_align_dictionary.values()])
 		seq_length_high = max([len(i[1]) for i in high_align_dictionary.values()])
 		max_seq_length = max(seq_length_low, seq_length_high)
-		print("no exact match found")
+		print("no exact matches found")
 		print("HIGH CONFIDENCE RANGE: Between {0} to {1}".format(dict_min_range_low-dict_seq_length+1, dict_max_range_low))
 		print("LOW  CONFIDENCE RANGE: Between {0} to {1}".format(max_seq_length-min_range, max_range))
 	print("\n")
@@ -299,12 +302,64 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	Genome Seq Length: <length of genome>
 	Total matches found: <total times the sequence appears>
 	
-	<genome_name> csci4314 match <start> <end> 100. + . ID=<#>
+	<genome_name> csci4314 match <percent match> ID=<#> + <start> <end>
 			CAT-AT--GGGA
 			|||~||~~|
 	  TATAGACATCATACG
 	...
 	####################################################################
+	EXACT MATCH FOUND EXAMPLE:
+	Genome File: genome_example.fasta
+	Genome Seq:  GEN_0
+	Align Seq:   SEQ_2
+
+	Genome Seq Length: 14
+	Total matches found: 1
+
+	exact match found
+	HIGH CONFIDENCE RANGE: Between 9 to 11
+
+
+	GEN_0  csci4314  match  100.00  ID=1  +  9  11
+
+	Full Sequence Display:
+			  CAT
+			  |||
+	  TATAGACACATACG
+	####################################################################
+	NO EXACT MATCH FOUND EXAMPLE:
+	Genome File: genome_example.fasta
+	Genome Seq:  GEN_0
+	Align Seq:   SEQ_1
+
+	Genome Seq Length: 14
+	Total matches found: 3
+
+	no exact match found
+	HIGH CONFIDENCE RANGE: Between 0 to 10
+	LOW  CONFIDENCE RANGE: Between 2 to 13
+
+
+	GEN_0  csci4314  match  100.00  ID=1  +  2  10
+
+	Full Sequence Display:
+		  CGCG-TA-A-A-AAAAA
+		  ~||~|~|~|
+	  TATAGACACATACG
+
+	GEN_0  csci4314  match  30.00  ID=2  +  4  13
+
+	Full Sequence Display:
+		 CGCGCGCGTAAAA
+		 XXX|XX|X|X
+	  TATAGACACATACG
+
+	GEN_0  csci4314  match  100.00  ID=3  +  1  8
+
+	Full Sequence Display:
+		   CGCGCTA-A-A-AAAA
+		   ||~|~|~|
+	  TATAGACACATACG
 	'''
 	# combine low/high confidence dictionaries into one that can be iterated through
 	total_updated_dictionary = dict(high_align_dictionary)
@@ -381,12 +436,12 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		spaces =  ' '*max(aligned_start_position, genome_start_position) # + ' ' # aligns the empty spaces to line up sequences on print console
 		# plus one accounts for the use of '^' in the print statement if used
 
-		'''
+
 		print("\nFull Sequence Display:")
 		print("  {0}{1}".format(spaces, updated_aligner_sequence))
 		print("  {0}{1}".format(spaces, symbols))
 		print("  {0}\n".format(updated_genome_sequence))
-		'''
+
 	print("####################################################################")
 
 ########################################################################
