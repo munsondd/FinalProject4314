@@ -7,7 +7,10 @@
     # Compares a list of small sequences to one large genome and returns all alignments
     # Finds local regions with the highest levels of conservation/similarity
 
-    # Psuedo-Code: Updated version of the Smith Waterman algorithm
+    # Exapnded implementation of the Smith Waterman algorithm
+    # Expansion: Using both high and low confidence ranges (dynamic scoring matrix)
+    # High confidence ranges: matches found with low levels of mismatches allowed
+    # Low confidence ranges: matches found when higher levels of mismatches are allowed
     
     # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename> -P <print_format>
 	# Sequence file: File that contains all large genomes that will be aligned against
@@ -17,13 +20,13 @@
 ########################################################################
 
 import argparse # parse given flag options
-import re
+import re # regular expressions
 import operator # allows for itemgetter for max value in a dictionary
 
+# scoring matrix:
 match_score = 3
 gap_score = -1
-
-# <sequence title>/t<+/->\t<start>\t<end for gapped>
+# mismatch score is dynamic and changes to allow for high and low confidence ranges
 
 ########################################################################
 ## SETTING UP THE DICTIONARIES FROM THE GIVEN FILES
@@ -78,13 +81,6 @@ def seqDictPairs(header_list, sequence_list):
 	seq_gen_dict = zip(header_list, sequence_list) # combine the two lists
 	seq_gen_dict = dict(seq_gen_dict) # create new dictionary from the lists
 	return seq_gen_dict
-
-########################################################################
-## CHECKS IF IT EXISTS EXACTLY (for optimizing)
-def checkExists(align_seq, genome_seq):
-	# return true/false if the expected sequence exists exactly (no gaps required)
-	# returns (true/false, # of times it appears (default=0), index if it only appears once (default=None)
-	pass
 
 ########################################################################
 ## CREATE MATRICES FOR LOCAL ALIGNMENT's DYNAMIC PROGRAMMING
@@ -186,20 +182,15 @@ def traceBackPath(traceback_dictionary, max_location_dictionary, location_value_
 
 
 	for key in max_location_dictionary:
-		#print("\n\t\tKEY: {0}\n".format(key))
 		current_location = key
 		internal_path.append(traceback_dictionary[current_location][0])
 		while (location_value_dict[current_location] != 0):
-			#print(current_location)
-			#print(traceback_dictionary[current_location])
-			#print(location_value_dict[current_location])
 			current_location = traceback_dictionary[current_location][1]
 			if (traceback_dictionary[current_location][0] != 'intial'): # include full path, ignore the final 0
 				internal_path.append(traceback_dictionary[current_location][0])
 		traceback_word_paths[key] = internal_path
 		internal_path = []
 
-	#print(traceback_word_paths)
 	return traceback_word_paths
 
 def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
@@ -244,7 +235,6 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 		#print("small: {0}, large: {1}".format(aligned_small_sequence[::-1], aligned_large_genome[::-1]))
 		aligned_small_sequence = ''
 		aligned_large_genome = ''
-	#print(total_aligned)
 	return total_aligned
 ########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
@@ -327,7 +317,7 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	Full Sequence Display:
 			  CAT
 			  |||
-	  TATAGACACATACG
+	          TATAGACACATACG
 	####################################################################
 	NO EXACT MATCH FOUND EXAMPLE:
 	Genome File: genome_example.fasta
@@ -520,7 +510,7 @@ if __name__ == '__main__':
 			print("alignment source filename not given")
 			exit()
 		if print_format is None:
-			print("print format is not provided")
+			print("print format is not provided, use either 'user' or 'bowtie'")
 			exit()
 
 	# only accept file that are fasta
@@ -606,4 +596,4 @@ if __name__ == '__main__':
 			printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
 		if print_format.upper() == 'BOWTIE':
 			# bowtie-format output:
-			printBowtieFormat(high_confidence_alignment_dicts, pair[0])
+		`	printBowtieFormat(high_confidence_alignment_dicts, pair[0])
