@@ -604,5 +604,3 @@ if __name__ == '__main__':
 		if print_format.upper() == 'BOWTIE':
 			# bowtie-format output:
 			printBowtieFormat(high_confidence_alignment_dicts, pair[0])
-		if print_format.upper != 'BOWTIE' and print_format.upper() != 'USER':
-			print("{0} is not a usable print format, use either 'USER' or 'BOWTIE'".format(print_format.upper()))
