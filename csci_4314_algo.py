@@ -9,10 +9,11 @@
 
     # Psuedo-Code: Updated version of the Smith Waterman algorithm
     
-    # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename>
+    # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename> -P <print_format>
 	# Sequence file: File that contains all large genomes that will be aligned against
 		# Sequence: The specific sequence within the file that will be aligned against
 	# Alignment File: File that contains all the smaller sequences to be aligned
+	# Print Format: Either print results as 'user' friendly or 'bowtie' format
 ########################################################################
 
 import argparse # parse given flag options
@@ -20,8 +21,9 @@ import re
 import operator # allows for itemgetter for max value in a dictionary
 
 match_score = 3
-#mismatch_score = -2 #TODO: allows for mismatches in 20% of the sequence
 gap_score = -1
+
+# <sequence title>/t<+/->\t<start>\t<end for gapped>
 
 ########################################################################
 ## SETTING UP THE DICTIONARIES FROM THE GIVEN FILES

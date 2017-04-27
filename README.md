@@ -1,3 +1,18 @@
+# Breakdown of Arguments
+
+```
+Format: -SF <genome filename> -S <specific genome> -AF <align filename> -P <print format>
+```
+#### -SF: Genome Filename
+The genome file is a .fasta file that contains a list of different genomes. If the file only contains one genome, it will still need to include both a filename and a specific genome as listed below in -S
+#### -S: Specific Genome
+The specific genome within the larger -SF (genome file) that the user wants to compare all the sequences against
+#### -AF: Sequence Aligners Filename
+A .fasta file that contains all the smaller sequences that the user wants to align against the larger genome
+#### -P: Print Format
+The specific print formatting that the user wants to output to the console. Currently works for 'user' and 'bowtie'. User is a user friendly printing style and bowtie is the bowtie format used for benchmarking. See below for examples of both
+
+
 # Run Existing Algorithm
  To run code:
  1. Download repo
