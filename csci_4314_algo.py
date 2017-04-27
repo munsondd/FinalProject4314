@@ -366,14 +366,13 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	# combine low/high confidence dictionaries into one that can be iterated through
 	total_updated_dictionary = dict(high_align_dictionary)
 	total_updated_dictionary.update(low_align_dictionary)
-	
 	print("####################################################################")
 	print("Genome File: {0}".format(genome_filename))
 	print("Genome Seq:  {0}".format(genome_name))
 	print("Align Seq:   {0}".format(align_name))
 	print("\nGenome Seq Length: {0}".format(len(genome_sequence)-1))
 	print("Total matches found: {0}\n".format(len(total_updated_dictionary.keys()))) # total number of times a sequence appears
-
+	
 	findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence) # print range of confidences
 	
 	aligner_sequence = aligner_sequence[1:] # remove preceding gapping done for sequence alignment
@@ -382,11 +381,54 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	id_counter = 1 # keeps track for printing the id value for each found value
 
 	for key in total_updated_dictionary:
-
 		both_alignments = total_updated_dictionary[key]
 		small_align = both_alignments[0]
 		large_genome = both_alignments[1]
 
+		print(large_genome)
+		symbols = symbolGenerate(large_genome, small_align)
+	
+		percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
+		#print("Starting Location: {0}".format(key))
+		#print("{0} - {1} = {2}/{3} = {4}".format(len(large_genome), symbols.count('X'), len(large_genome)-symbols.count('X'), len(large_genome), percent_match))
+		print("{0}  csci4314  match  {1:.2f}  ID={2}  +  {3}  {4}".format(genome_name, percent_match, id_counter,  key[1]-len(large_genome)+1, key[1]))
+		id_counter += 1
+		
+		
+		# commented out for simple printing
+		# print with only aligned section
+		#printSequenceAligned(small_align, large_genome, symbols)
+		# print with sequence displayed
+		printFullSequence(key, small_align, aligner_sequence, large_genome, genome_sequence, symbols)
+		
+	print("####################################################################")
+
+def printBowtieFormat(high_align_dictionary, align_name):
+	# print format to match the output of bowtie to be spliced
+	# if there is more than one match for the highest value
+	if len(high_align_dictionary) > 1:
+		multiple_start_locations = high_align_dictionary.keys()
+		min_loc = min(multiple_start_locations, key=operator.itemgetter(1))
+		small_align = high_align_dictionary[min_loc][0]
+		large_genome = high_align_dictionary[min_loc][1]
+		
+		genome_start_position = max(0, min_loc[1] - len(large_genome))+1
+		genome_end_position = min_loc[1]
+	# if there is only one match for the highest value
+	else:
+		for key in high_align_dictionary:
+			small_align = high_align_dictionary[key][0]
+			large_genome = high_align_dictionary[key][1]
+			
+			genome_start_position = max(0, key[1] - len(large_genome))+1
+			genome_end_position = key[1]
+	
+	total_gaps = large_genome.count('-')
+	symbols =  symbolGenerate(large_genome, small_align)
+	percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
+	print("{0}\t+\tSTART={1}\tEND={2}\tGAPS={3}\tMATCH={4}".format(align_name, genome_start_position, genome_end_position, total_gaps, percent_match))
+
+def symbolGenerate(large_genome, small_align):
 		symbols = ""
 		# set up symbols between both alignments when printed
 		for i in range(len(large_genome)):
@@ -396,18 +438,14 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 				symbols = symbols + '~'
 			elif (small_align[i] != '-' and large_genome[i] != '-') and (small_align[i] != large_genome[i]):
 				symbols = symbols + 'X'
+		return symbols
 
-		#print("Starting Location: {0}".format(key))
-		percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
-		#print("{0} - {1} = {2}/{3} = {4}".format(len(large_genome), symbols.count('X'), len(large_genome)-symbols.count('X'), len(large_genome), percent_match))
-		print("{0}  csci4314  match  {1:.2f}  ID={2}  +  {3}  {4}".format(genome_name, percent_match, id_counter,  key[1]-len(large_genome)+1, key[1]))
-		id_counter += 1
-
-		'''
+def printSequenceAligned(small_align, large_genome, symbols):
 		print("\nAlignment Sequence Only:")
-		#print("small_align_: {0}".format(small_align))
-		#print("              {0}".format(symbols))
-		#print("large_genome: {0}".format(large_genome))
+		print("small_align_: {0}".format(small_align))
+		print("              {0}".format(symbols))
+		print("large_genome: {0}".format(large_genome))
+		'''
 		Example:
 		small_align_: CAT-AT--G
               |||~||~~|
@@ -415,6 +453,7 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		When the full looks like: 'TATAGACATCATACG', 'CATATGGGA'
 		'''
 
+def printFullSequence(key, small_align, aligner_sequence, large_genome, genome_sequence, symbols):
 		#### PRINT FULL SEQUENCE
 		aligned_start_position = max(0, key[0] - len(small_align)) # produces a non-negative range
 		aligned_end_position = aligned_start_position + len(small_align.replace('-', ''))
@@ -443,8 +482,13 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		print("  {0}{1}".format(spaces, updated_aligner_sequence))
 		print("  {0}{1}".format(spaces, symbols))
 		print("  {0}\n".format(updated_genome_sequence))
-
-	print("####################################################################")
+		'''
+		Example:
+		Full Sequence Display:
+		CATA-TGGGA
+		X|||~XXXX|
+		TATAGACACATACG
+		'''
 
 ########################################################################
 
@@ -454,14 +498,16 @@ if __name__ == '__main__':
 	parser.add_argument('-SF', '-Sequence_File', help="given sequence file, must be .fasta")
 	parser.add_argument('-S', '-Sequence_Name', help="given sequence file found in sequence file")
 	parser.add_argument('-AF', '-Alignment_File', help="given sequence to align's file, must be .fasta")
+	parser.add_argument('-P', '-Print_Format', help="how to print the final results")
 	# order of arguments does not matter
 
 	args = parser.parse_args()
 	sequence_filename = args.SF
 	sequence_name = args.S
 	alignment_filename = args.AF
+	print_format = args.P
 	
-	arguments = [sequence_filename, sequence_name, alignment_filename]
+	arguments = [sequence_filename, sequence_name, alignment_filename, print_format]
 	# if either arguments are not given (left empty), then quit
 	if None in arguments:
 		if sequence_filename is None:
@@ -472,6 +518,9 @@ if __name__ == '__main__':
 			exit()
 		if alignment_filename is None:
 			print("alignment source filename not given")
+			exit()
+		if print_format is None:
+			print("print format is not provided")
 			exit()
 
 	# only accept file that are fasta
@@ -551,6 +600,10 @@ if __name__ == '__main__':
 
 		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
 		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
-		printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
 		
-		print("\n")
+		if print_format.upper() == 'USER':
+			# user friendly output:
+			printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
+		if print_format.upper() == 'BOWTIE':
+			# bowtie-format output:
+			printBowtieFormat(high_confidence_alignment_dicts, pair[0])
