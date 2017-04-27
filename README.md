@@ -3,27 +3,104 @@
  1. Download repo
  2. Requires python:  
  ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta```
- #### Example Output
+ #### Example Output if found EXACTLY (single/multiple instances)
  ```
- Genome File: genome_example.fasta
+Genome File: genome_example.fasta
+Genome Seq:  GEN_0
+Align Seq:   SEQ_2
+
+Genome Seq Length: 14
+Total matches found: 1
+
+exact match found
+HIGH CONFIDENCE RANGE: Between 9 to 11
+
+
+GEN_0  csci4314  match  100.00  ID=1  +  9  11
+
+Full Sequence Display:
+          CAT
+          |||
+  TATAGACACATACG
+  
+####################################################################
+
+Genome File: genome_example.fasta
+Genome Seq:  GEN_0
+Align Seq:   SEQ_4
+
+Genome Seq Length: 14
+Total matches found: 3
+
+exact matches found
+HIGH CONFIDENCE RANGE: Between 1 to 12
+
+
+GEN_0  csci4314  match  100.00  ID=1  +  11  12
+
+Full Sequence Display:
+            TA
+            ||
+  TATAGACACATACG
+
+GEN_0  csci4314  match  100.00  ID=2  +  1  2
+
+Full Sequence Display:
+  TA
+  ||
+  TATAGACACATACG
+
+GEN_0  csci4314  match  100.00  ID=3  +  3  4
+
+Full Sequence Display:
+    TA
+    ||
+  TATAGACACATACG
+
+ ```
+  #### Example Output if found NOT EXACTLY
+```
+Genome File: genome_example.fasta
 Genome Seq:  GEN_0
 Align Seq:   SEQ_0
 
-Genome Seq Length: 16
-Total matches found: 1
+Genome Seq Length: 14
+Total matches found: 3
 
-GEN_0  csci4314  match  -1  8  100.  +  .  ID=1
-ATGAGGAGA
-||~|~||X|
-AT-A-GACAATCATACG
+no exact matches found
+HIGH CONFIDENCE RANGE: Between 0 to 8
+LOW  CONFIDENCE RANGE: Between 3 to 12
 
- ```
+
+GEN_0  csci4314  match  44.44  ID=1  +  2  10
+
+Full Sequence Display:
+   ATGAGGAGA
+   ||XXXX|X|
+  TATAGACACATACG
+
+GEN_0  csci4314  match  88.89  ID=2  +  0  8
+
+Full Sequence Display:
+  ATGAGGAGA
+  ||~|~||X|
+  AT-A-GACAACATACG
+
+GEN_0  csci4314  match  72.73  ID=3  +  2  12
+
+Full Sequence Display:
+   AT-GA-GGAGA
+   ||~||~XX|X|
+  TATAGACACATACG
+```
+ 
  Legend: 
  ```
  '|' = match
  '~' = gap
  'X' = mismatch
  ```
+ 
 
 ### interpret bowtie results
 
