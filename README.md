@@ -2,8 +2,10 @@
  To run code:
  1. Download repo
  2. Requires python:  
- ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta```
- #### Example Output if found EXACTLY (single/multiple instances)
+ ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta -P user```
+ 
+ ### Two print formats: 'USER' and 'BOWTIE'
+ #### Example Output for 'USER' if found EXACTLY (single/multiple instances)
  ```
 Genome File: genome_example.fasta
 Genome Seq:  GEN_0
@@ -58,7 +60,7 @@ Full Sequence Display:
   TATAGACACATACG
 
  ```
-  #### Example Output if found NOT EXACTLY
+  #### Example Output for USER if found NOT EXACTLY
 ```
 Genome File: genome_example.fasta
 Genome Seq:  GEN_0
@@ -100,7 +102,15 @@ Full Sequence Display:
  '~' = gap
  'X' = mismatch
  ```
- 
+  #### Example Output for 'BOWTIE', if multiple of the same match is found, finds the first instances (earliest start location)
+```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta -P bowtie```
+```
+SEQ_4	+	START=1	END=2	GAPS=0	MATCH=100.0
+SEQ_1	+	START=1	END=8	GAPS=0	MATCH=100.0
+SEQ_0	+	START=1	END=8	GAPS=2	MATCH=88.8888888889
+SEQ_3	+	START=9	END=14	GAPS=0	MATCH=83.3333333333
+SEQ_2	+	START=9	END=11	GAPS=0	MATCH=100.0
+```
 
 ### interpret bowtie results
 
