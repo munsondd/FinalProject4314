@@ -1,4 +1,4 @@
-# Expande Smith Waterman Implementation
+# Expanded Smith Waterman Implementation
 This code is an expanded version of the traditional Smith Waterman algorithm for local alignment. This is meant to benchmark against Bowtie. While Bowtie is a far superior application in terms of performance, it is not as strong as Smith Waterman in terms of accuracy. Smith Waterman will always find an existing alignment without false negatives/postives given an existing scoring matrix. This code also dynamically changes the 'mismatch' score to allow for a range of confidences to find more possible instances of a match.
 # Breakdown of Arguments
 
