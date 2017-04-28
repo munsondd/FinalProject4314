@@ -521,21 +521,11 @@ if __name__ == '__main__':
 			exit()
 
 	# only accept file that are fasta
-	if sequence_filename.endswith('.fasta') and alignment_filename.endswith('fasta'):
-		pass
-	elif sequence_filename.endswith('.FASTA') and alignment_filename.endswith('.FASTA'):
-		pass
-	elif sequence_filename.endswith('.FA') and alignment_filename.endswith('.FA'):
-		pass
-	elif sequence_filename.endswith('.fa') and alignment_filename.endswith('.fa'):
+	if  (sequence_filename.endswith('fasta') or sequence_filename.endswith('.FASTA') or sequence_filename('.fa') or sequence_filename('.FA')) and (alignment_filename.endswith('fasta') or alignment_filename.endswith('.FASTA') or alignment_filename('.fa') or alignment_filename('.FA')):
 		pass
 	else:
-		if not sequence_filename.endswith('.fasta') or sequence_filename.endswith('.FASTA') or sequence_filename.endswith('.fa'):
-			print("\n\t{0} is not a .fasta file, please choose a different file\n".format(sequence_filename))
-			exit()
-		if not alignment_filename.endswith('.fasta') or alignment_filename.endswith('.FASTA') or alignment_filename.endswith('.fa'):
-			print("\n\t{0} is not a .fasta file, please choose a different file\n".format(alignment_filename))
-			exit()
+		print("\n\t{0} or {1} is not a .fasta file, please choose a different file\n".format(sequence_filename, alignment_filename))
+		exit()
 	'''
 	The following returns a list of the sequence headers ['chrI', 'chrII',
 	etc...) and genome ['ATC', 'TGGC', etc..] that is spliced out of a
