@@ -26,11 +26,12 @@ The specific print formatting that the user wants to output to the console. Curr
  ```
 Genome File: genome_example.fasta
 Genome Seq:  GEN_0
-Align Seq:   SEQ_2
+Align Seq:   SEQ_2, on the foward strand
 
-Genome Seq Length: 14
+Genome Seq Length: 13
 Total matches found: 1
 
+True
 exact match found
 HIGH CONFIDENCE RANGE: Between 9 to 11
 
@@ -40,17 +41,17 @@ GEN_0  csci4314  match  100.00  ID=1  +  9  11
 Full Sequence Display:
           CAT
           |||
-  TATAGACACATACG
-  
+  ATAGACACCATCG
 ####################################################################
 
 Genome File: genome_example.fasta
 Genome Seq:  GEN_0
-Align Seq:   SEQ_4
+Align Seq:   SEQ_4, on the foward strand
 
-Genome Seq Length: 14
+Genome Seq Length: 13
 Total matches found: 3
 
+True
 exact matches found
 HIGH CONFIDENCE RANGE: Between 1 to 12
 
@@ -60,57 +61,67 @@ GEN_0  csci4314  match  100.00  ID=1  +  11  12
 Full Sequence Display:
             TA
             ||
-  TATAGACACATACG
+  ATAGACACATTAG
 
 GEN_0  csci4314  match  100.00  ID=2  +  1  2
 
 Full Sequence Display:
   TA
   ||
-  TATAGACACATACG
+  TAAGACACATACG
 
 GEN_0  csci4314  match  100.00  ID=3  +  3  4
 
 Full Sequence Display:
     TA
     ||
-  TATAGACACATACG
+  ATTAACACATACG
 
  ```
   #### Example Output for USER if found NOT EXACTLY
 ```
 Genome File: genome_example.fasta
 Genome Seq:  GEN_0
-Align Seq:   SEQ_0
+Align Seq:   SEQ_2, on the back strand (complement)
 
-Genome Seq Length: 14
-Total matches found: 3
+Genome Seq Length: 13
+Total matches found: 4
 
+False
 no exact matches found
-HIGH CONFIDENCE RANGE: Between 0 to 8
-LOW  CONFIDENCE RANGE: Between 3 to 12
+HIGH CONFIDENCE RANGE: Between 2 to 5
+LOW  CONFIDENCE RANGE: Between 0 to 14
 
 
-GEN_0  csci4314  match  44.44  ID=1  +  2  10
-
-Full Sequence Display:
-   ATGAGGAGA
-   ||XXXX|X|
-  TATAGACACATACG
-
-GEN_0  csci4314  match  88.89  ID=2  +  0  8
+GEN_0  csci4314  match  66.67  ID=1  -  10  12
 
 Full Sequence Display:
-  ATGAGGAGA
-  ||~|~||X|
-  AT-A-GACAACATACG
+           ATG
+           ||X
+  ATAGACACAATAG
 
-GEN_0  csci4314  match  72.73  ID=3  +  2  12
+GEN_0  csci4314  match  66.67  ID=2  -  2  4
 
 Full Sequence Display:
-   AT-GA-GGAGA
-   ||~||~XX|X|
-  TATAGACACATACG
+   ATG
+   ||X
+  AATAACACATACG
+
+GEN_0  csci4314  match  66.67  ID=3  -  12  14
+
+Full Sequence Display:
+             ATG
+             |X|
+  ATAGACACATAACG
+
+GEN_0  csci4314  match  100.00  ID=4  -  2  5
+
+Full Sequence Display:
+   AT-G
+   ||~|
+  AATAGCACATACG
+
+
 ```
  
  Legend: 
@@ -119,16 +130,22 @@ Full Sequence Display:
  '~' = gap
  'X' = mismatch
  ```
-  #### Example Output for 'BOWTIE', if multiple of the same match is found, finds the first instances (earliest start location)
+#### Example Output for 'BOWTIE', if multiple of the same match is found, finds the first instances (earliest start location)
 ```python csci_4314_algo.py -SF genome_example.fasta -S GEN_0 -AF aligners_example.fasta -P bowtie```
+#### Output Format: 
+```<Sequence Name being aligned> <foward/back strand> START=<Start location> <END>=<End location> GAPS_GENOME=<gaps required for alignment in the genome> GAPS_SEQ=<gaps required for alignment in the sequence> MATCH=<percent match, excluding gaps, just mismatch value>```
 ```
-SEQ_4	+	START=1	END=2	GAPS=0	MATCH=100.0
-SEQ_1	+	START=1	END=8	GAPS=0	MATCH=100.0
-SEQ_0	+	START=1	END=8	GAPS=2	MATCH=88.8888888889
-SEQ_3	+	START=9	END=14	GAPS=0	MATCH=83.3333333333
-SEQ_2	+	START=9	END=11	GAPS=0	MATCH=100.0
+SEQ_4	+	START=2	END=2	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=100.00
+SEQ_4	-	START=1	END=1	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=100.00
+SEQ_1	+	START=1	END=8	GAPS_GENOME=0	GAPS_SEQ=3	MATCH=100.00
+SEQ_1	-	START=1	END=14	GAPS_GENOME=1	GAPS_SEQ=4	MATCH=86.67
+SEQ_0	+	START=1	END=8	GAPS_GENOME=2	GAPS_SEQ=0	MATCH=88.89
+SEQ_0	-	START=6	END=11	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=66.67
+SEQ_3	+	START=9	END=14	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=83.33
+SEQ_3	-	START=6	END=14	GAPS_GENOME=0	GAPS_SEQ=1	MATCH=77.78
+SEQ_2	+	START=9	END=11	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=100.00
+SEQ_2	-	START=2	END=5	GAPS_GENOME=0	GAPS_SEQ=1	MATCH=100.00
 ```
-
 ### interpret bowtie results
 
 bowtie results are printed as follows:
