@@ -77,13 +77,21 @@ def seqDictPairs(header_list, sequence_list):
 	return seq_gen_dict
 
 ########################################################################
-## CHECKS IF IT EXISTS EXACTLY (for optimizing)
-def checkExists(align_seq, genome_seq):
-	# return true/false if the expected sequence exists exactly (no gaps required)
-	# returns (true/false, # of times it appears (default=0), index if it only appears once (default=None)
-	pass
-
+## RUN COMPLEMENT FOR "BACKWARD" STRAND
+def complementLetter(seq):
+	# produces the complement DNA sequence for kmers and sequences
+	#print("seq: {0}".format(seq))
+	complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', '-': ''}  # complement dictionary to swap values
+	new_bases = []
+	for letter in seq:
+		swap = complement.get(letter)
+		new_bases.append(swap)
+	new_bases = ''.join(new_bases)
+	final_complement = new_bases[::-1]
+	#print("{0} becomes {1}".format(seq, final_complement))
+	return final_complement # returns a new string with the letters swapped for their complement
 ########################################################################
+
 ## CREATE MATRICES FOR LOCAL ALIGNMENT's DYNAMIC PROGRAMMING
 
 def orderedPairs(align_dict, genome_seq):
@@ -186,7 +194,7 @@ def traceBackPath(traceback_dictionary, max_location_dictionary, location_value_
 		#print("\n\t\tKEY: {0}\n".format(key))
 		current_location = key
 		internal_path.append(traceback_dictionary[current_location][0])
-		while (location_value_dict[current_location] != 0):
+		while (location_value_dictionary[current_location] != 0):
 			#print(current_location)
 			#print(traceback_dictionary[current_location])
 			#print(location_value_dict[current_location])
@@ -244,6 +252,44 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 	#print(total_aligned)
 	return total_aligned
 ########################################################################
+## CREATE DP MATRIX USED BY FOWARD AND BACK STRAND (COMPLEMENT)
+def createDpMatrixFowardBack(aligned_sequence, genome_to_align):
+		# add gap value at the start of both sequences
+		aligned_sequence = '-' + aligned_sequence
+		genome_to_align = '-' + genome_to_align
+		# width of matrix is the size of the genome, height is the size of the aligner sequence
+		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
+
+		high_confidence_mismatch_score = -2 # limits the amount of mismatches
+
+		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, high_confidence_mismatch_score)
+		
+		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
+		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
+
+		#### HIGH CONFIDENCE RANGE
+		traceback_dict = dp_total[1] # contains the path that populated the values
+		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
+		
+		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
+
+		#### LOW CONFIDENCE RANGE
+		# set up the range for high and low confidence based on found values
+		low_confidence_mismatch_score = 2 # expand total mismatches
+		low_dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, low_confidence_mismatch_score)
+
+		low_dp_local_matrix = low_dp_total[0] # the matrix produced by the dynamic program
+		low_traceback_dict = low_dp_total[1] # contains the path that populated the values
+		low_max_location_dict = low_dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		low_location_value_dict = low_dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
+		
+		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
+		
+		return (high_confidence_alignment_dicts, low_confidence_alignment_dicts)
+########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
 def neatPrintMatrix(matrix, top_sequence, side_sequence):
 	# print with character inline, top is genome, side is sequence to be aligned
@@ -267,6 +313,7 @@ def findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequ
 	dict_max_range_low = max([int(i[1]) for i in high_align_dictionary.keys()])
 	dict_seq_length = max([len(i[1]) for i in high_align_dictionary.values()])
 
+	print(high_align_dictionary == low_align_dictionary)
 	if high_align_dictionary == low_align_dictionary:
 		match_es = 'match'
 		if (len(high_align_dictionary.values()) != 1):
@@ -290,7 +337,7 @@ def findRangeConfidence(high_align_dictionary, low_align_dictionary, genome_sequ
 		print("LOW  CONFIDENCE RANGE: Between {0} to {1}".format(max_seq_length-min_range, max_range))
 	print("\n")
 
-def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name):
+def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_sequence, aligner_sequence, genome_filename, genome_name, align_name, symbol_foward_back):
 	# print alignments for console
 	'''
 	####################################################################
@@ -366,7 +413,10 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	print("####################################################################")
 	print("Genome File: {0}".format(genome_filename))
 	print("Genome Seq:  {0}".format(genome_name))
-	print("Align Seq:   {0}".format(align_name))
+	comp_running = ', on the foward strand'
+	if symbol_foward_back == '-':
+		comp_running = ', on the back strand (complement)'
+	print("Align Seq:   {0}{1}".format(align_name, comp_running))
 	print("\nGenome Seq Length: {0}".format(len(genome_sequence)-1))
 	print("Total matches found: {0}\n".format(len(total_updated_dictionary.keys()))) # total number of times a sequence appears
 	
@@ -382,13 +432,12 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		small_align = both_alignments[0]
 		large_genome = both_alignments[1]
 
-		print(large_genome)
 		symbols = symbolGenerate(large_genome, small_align)
 	
 		percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
 		#print("Starting Location: {0}".format(key))
 		#print("{0} - {1} = {2}/{3} = {4}".format(len(large_genome), symbols.count('X'), len(large_genome)-symbols.count('X'), len(large_genome), percent_match))
-		print("{0}  csci4314  match  {1:.2f}  ID={2}  +  {3}  {4}".format(genome_name, percent_match, id_counter,  key[1]-len(large_genome)+1, key[1]))
+		print("{0}  csci4314  match  {1:.2f}  ID={2}  {3}  {4}  {5}".format(genome_name, percent_match, id_counter,  symbol_foward_back, key[1]-len(large_genome)+1, key[1]))
 		id_counter += 1
 		
 		
@@ -400,7 +449,7 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		
 	print("####################################################################")
 
-def printBowtieFormat(high_align_dictionary, align_name):
+def printBowtieFormat(high_align_dictionary, align_name, symbol_foward_back):
 	# print format to match the output of bowtie to be spliced
 	# if there is more than one match for the highest value
 	if len(high_align_dictionary) > 1:
@@ -420,10 +469,11 @@ def printBowtieFormat(high_align_dictionary, align_name):
 			genome_start_position = max(0, key[1] - len(large_genome))+1
 			genome_end_position = key[1]
 	
-	total_gaps = large_genome.count('-')
+	genome_gaps = large_genome.count('-')
+	align_gaps = small_align.count('-')
 	symbols =  symbolGenerate(large_genome, small_align)
 	percent_match = float(len(large_genome)-symbols.count('X'))/float(len(large_genome))*100 # counts mismatches
-	print("{0}\t+\tSTART={1}\tEND={2}\tGAPS={3}\tMATCH={4}".format(align_name, genome_start_position, genome_end_position, total_gaps, percent_match))
+	print("{0}\t{1}\tSTART={2}\tEND={3}\tGAPS_GENOME={4}\tGAPS_SEQ={5}\tMATCH={6:.2f}".format(align_name, symbol_foward_back, genome_start_position, genome_end_position, genome_gaps, align_gaps, percent_match))
 
 def symbolGenerate(large_genome, small_align):
 		symbols = ""
@@ -561,40 +611,25 @@ if __name__ == '__main__':
 				print("\n\t'{0}' is larger than the genome '{1}' to compare against, choose a different sequence or genome\n".format(pair[0], pair[1]))
 				exit()
 
-		# add gap value at the start of both sequences
-		aligned_sequence = '-' + aligned_sequence
-		genome_to_align = '-' + genome_to_align
-		# width of matrix is the size of the genome, height is the size of the aligner sequence
-		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
-
-		high_confidence_mismatch_score = -2 # limits the amount of mismatches
-
-		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, high_confidence_mismatch_score)
+		################# FOWARD STRAND
+		full_sequence_search_foward = createDpMatrixFowardBack(aligned_sequence, genome_to_align)
+		foward_high_confidence_alignment_dicts = full_sequence_search_foward[0]
+		foward_low_confidence_alignment_dicts = full_sequence_search_foward[1]
+		####################
 		
-		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
-		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
-
-		traceback_dict = dp_total[1] # contains the path that populated the values
-		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
-		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
-		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
-		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-
-		# set up the range for high and low confidence based on found values
-		low_confidence_mismatch_score = 2 # expand total mismatches
-		low_dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, low_confidence_mismatch_score)
-
-		low_dp_local_matrix = low_dp_total[0] # the matrix produced by the dynamic program
-		low_traceback_dict = low_dp_total[1] # contains the path that populated the values
-		low_max_location_dict = low_dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
-		low_location_value_dict = low_dp_total[3] # contains a dictionary that stores the row/column and it's associated value
-
-		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
-		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
+		#################### BACK STRAND
+		seq_complement = complementLetter(aligned_sequence)
+		full_sequence_search_back = createDpMatrixFowardBack(seq_complement, genome_to_align)
+		back_high_confidence_alignment_dicts = full_sequence_search_back[0]
+		back_low_confidence_alignment_dicts = full_sequence_search_back[1]
+		####################
 		
+		#################### PRINT FORMAT OPTIONS
 		if print_format.upper() == 'USER':
 			# user friendly output:
-			printNeatAlignment(high_confidence_alignment_dicts, low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0])
+			printNeatAlignment(foward_high_confidence_alignment_dicts, foward_low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0], '+')
+			printNeatAlignment(back_high_confidence_alignment_dicts, back_low_confidence_alignment_dicts, genome_to_align, aligned_sequence, sequence_filename, pair[1], pair[0], '-')
 		if print_format.upper() == 'BOWTIE':
 			# bowtie-format output:
-			printBowtieFormat(high_confidence_alignment_dicts, pair[0])
+			printBowtieFormat(foward_high_confidence_alignment_dicts, pair[0], '+')
+			printBowtieFormat(back_high_confidence_alignment_dicts, pair[0], '-')
