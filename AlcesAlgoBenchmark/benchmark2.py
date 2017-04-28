@@ -1,6 +1,6 @@
 import os
 import re
-directory = "../AlcesAlgoBenchmark"
+directory = "./BenchmarkBowtieOutput"
 
 # number of reads per file
 TR = 50
@@ -17,7 +17,7 @@ for filename in os.listdir(directory):
     if filename.endswith(".txt"):
         # rd is now specified as len?
         rd = int(re.search('_len_(.+?)_r', filename).group(1))
-        working_file = open(filename, 'r')
+        working_file = open(directory +"/"+filename, 'r')
         # loop through each file
         for line in working_file:
 
