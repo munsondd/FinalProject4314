@@ -525,6 +525,8 @@ if __name__ == '__main__':
 		pass
 	elif sequence_filename.endswith('.FASTA') and alignment_filename.endswith('.FASTA'):
 		pass
+	elif sequence_filename.endswith('.FA') and alignment_filename.endswith('.FA'):
+		pass
 	elif sequence_filename.endswith('.fa') and alignment_filename.endswith('.fa'):
 		pass
 	else:
