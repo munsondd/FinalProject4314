@@ -5,9 +5,11 @@
     # Purpose: Benchmark sequence aligner against Bowtie
     # Create a local aligner to benchmark against Bowtie
     # Compares a list of small sequences to one large genome and returns all alignments
+		# includes alignments on the back strand (complement)
     # Finds local regions with the highest levels of conservation/similarity
+		# HIGH/LOW confidence
 
-    # Psuedo-Code: Updated version of the Smith Waterman algorithm
+    # Updated version of the Smith Waterman algorithm
     
     # Format: -SF <sequence_filename> -S <sequence> -AF <align_filename>
 	# Sequence file: File that contains all large genomes that will be aligned against
@@ -19,6 +21,9 @@ import argparse # parse given flag options
 import re
 import operator # allows for itemgetter for max value in a dictionary
 
+# scoring values, mismatch is dynamically changed within the file from 0 -> 2
+# 0 = high confidence (allows for fewer mismatches)
+# 2 = lower confidence range (allows for more mismatches)
 match_score = 3
 gap_score = -1
 
@@ -252,44 +257,6 @@ def alignSequencesStrings(directions, genome_sequence, aligner_sequence):
 	#print(total_aligned)
 	return total_aligned
 ########################################################################
-## CREATE DP MATRIX USED BY FOWARD AND BACK STRAND (COMPLEMENT)
-def createDpMatrixFowardBack(aligned_sequence, genome_to_align):
-		# add gap value at the start of both sequences
-		aligned_sequence = '-' + aligned_sequence
-		genome_to_align = '-' + genome_to_align
-		# width of matrix is the size of the genome, height is the size of the aligner sequence
-		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
-
-		high_confidence_mismatch_score = -2 # limits the amount of mismatches
-
-		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, high_confidence_mismatch_score)
-		
-		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
-		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
-
-		#### HIGH CONFIDENCE RANGE
-		traceback_dict = dp_total[1] # contains the path that populated the values
-		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
-		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
-		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
-		
-		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
-
-		#### LOW CONFIDENCE RANGE
-		# set up the range for high and low confidence based on found values
-		low_confidence_mismatch_score = 2 # expand total mismatches
-		low_dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, low_confidence_mismatch_score)
-
-		low_dp_local_matrix = low_dp_total[0] # the matrix produced by the dynamic program
-		low_traceback_dict = low_dp_total[1] # contains the path that populated the values
-		low_max_location_dict = low_dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
-		low_location_value_dict = low_dp_total[3] # contains a dictionary that stores the row/column and it's associated value
-		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
-		
-		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
-		
-		return (high_confidence_alignment_dicts, low_confidence_alignment_dicts)
-########################################################################
 ## PRINT ALIGNMENT, MATRIX, etc...
 def neatPrintMatrix(matrix, top_sequence, side_sequence):
 	# print with character inline, top is genome, side is sequence to be aligned
@@ -341,71 +308,38 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 	# print alignments for console
 	'''
 	####################################################################
-	Genome File: <genome_filename>
-	Genome Seq:  <genome_name>
-	Align Seq:   <aligner_sequence_name>
-
-	Genome Seq Length: <length of genome>
-	Total matches found: <total times the sequence appears>
-	
-	<genome_name> csci4314 match <percent match> ID=<#> + <start> <end>
-			CAT-AT--GGGA
-			|||~||~~|
-	  TATAGACATCATACG
-	...
-	####################################################################
-	EXACT MATCH FOUND EXAMPLE:
 	Genome File: genome_example.fasta
 	Genome Seq:  GEN_0
-	Align Seq:   SEQ_2
+	Align Seq:   SEQ_4, on the foward strand
 
-	Genome Seq Length: 14
-	Total matches found: 1
-
-	exact match found
-	HIGH CONFIDENCE RANGE: Between 9 to 11
-
-
-	GEN_0  csci4314  match  100.00  ID=1  +  9  11
-
-	Full Sequence Display:
-			  CAT
-			  |||
-	  TATAGACACATACG
-	####################################################################
-	NO EXACT MATCH FOUND EXAMPLE:
-	Genome File: genome_example.fasta
-	Genome Seq:  GEN_0
-	Align Seq:   SEQ_1
-
-	Genome Seq Length: 14
+	Genome Seq Length: 13
 	Total matches found: 3
 
-	no exact match found
-	HIGH CONFIDENCE RANGE: Between 0 to 10
-	LOW  CONFIDENCE RANGE: Between 2 to 13
+	True
+	exact matches found
+	HIGH CONFIDENCE RANGE: Between 1 to 12
 
 
-	GEN_0  csci4314  match  100.00  ID=1  +  2  10
-
-	Full Sequence Display:
-		  CGCG-TA-A-A-AAAAA
-		  ~||~|~|~|
-	  TATAGACACATACG
-
-	GEN_0  csci4314  match  30.00  ID=2  +  4  13
+	GEN_0  csci4314  match  100.00  ID=1  +  11  12
 
 	Full Sequence Display:
-		 CGCGCGCGTAAAA
-		 XXX|XX|X|X
-	  TATAGACACATACG
+				TA
+				||
+	  ATAGACACATTAG
 
-	GEN_0  csci4314  match  100.00  ID=3  +  1  8
+	GEN_0  csci4314  match  100.00  ID=2  +  1  2
 
 	Full Sequence Display:
-		   CGCGCTA-A-A-AAAA
-		   ||~|~|~|
-	  TATAGACACATACG
+	  TA
+	  ||
+	  TAAGACACATACG
+
+	GEN_0  csci4314  match  100.00  ID=3  +  3  4
+
+	Full Sequence Display:
+		TA
+		||
+	  ATTAACACATACG
 	'''
 	# combine low/high confidence dictionaries into one that can be iterated through
 	total_updated_dictionary = dict(high_align_dictionary)
@@ -443,7 +377,7 @@ def printNeatAlignment(high_align_dictionary, low_align_dictionary, genome_seque
 		
 		# commented out for simple printing
 		# print with only aligned section
-		#printSequenceAligned(small_align, large_genome, symbols)
+		# printSequenceAligned(small_align, large_genome, symbols)
 		# print with sequence displayed
 		printFullSequence(key, small_align, aligner_sequence, large_genome, genome_sequence, symbols)
 		
@@ -536,7 +470,44 @@ def printFullSequence(key, small_align, aligner_sequence, large_genome, genome_s
 		X|||~XXXX|
 		TATAGACACATACG
 		'''
+########################################################################
+## CREATE DP MATRIX USED BY FOWARD AND BACK STRAND (COMPLEMENT)
+def createDpMatrixFowardBack(aligned_sequence, genome_to_align):
+		# add gap value at the start of both sequences
+		aligned_sequence = '-' + aligned_sequence
+		genome_to_align = '-' + genome_to_align
+		# width of matrix is the size of the genome, height is the size of the aligner sequence
+		zero_matrix = zeroMatrix(len(genome_to_align), len(aligned_sequence))
 
+		high_confidence_mismatch_score = -2 # limits the amount of mismatches
+
+		dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, high_confidence_mismatch_score)
+		
+		dp_local_matrix = dp_total[0] # the matrix produced by the dynamic program
+		#neatPrintMatrix(dp_local_matrix, genome_to_align, aligned_sequence)
+
+		#### HIGH CONFIDENCE RANGE
+		traceback_dict = dp_total[1] # contains the path that populated the values
+		max_location_dict = dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		location_value_dict = dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+		traceback_path = traceBackPath(traceback_dict, max_location_dict, location_value_dict)
+		
+		high_confidence_alignment_dicts = alignSequencesStrings(traceback_path, genome_to_align, aligned_sequence)
+
+		#### LOW CONFIDENCE RANGE
+		# set up the range for high and low confidence based on found values
+		low_confidence_mismatch_score = 2 # expand total mismatches
+		low_dp_total = DPlocalMatrix(genome_to_align, aligned_sequence, zero_matrix, low_confidence_mismatch_score)
+
+		low_dp_local_matrix = low_dp_total[0] # the matrix produced by the dynamic program
+		low_traceback_dict = low_dp_total[1] # contains the path that populated the values
+		low_max_location_dict = low_dp_total[2] # contains a dictionary that stores the row/column of the largest value in the matrix
+		low_location_value_dict = low_dp_total[3] # contains a dictionary that stores the row/column and it's associated value
+		low_traceback_path = traceBackPath(low_traceback_dict, low_max_location_dict, low_location_value_dict)
+		
+		low_confidence_alignment_dicts = alignSequencesStrings(low_traceback_path, genome_to_align, aligned_sequence)
+		
+		return (high_confidence_alignment_dicts, low_confidence_alignment_dicts)
 ########################################################################
 
 if __name__ == '__main__':
@@ -576,16 +547,9 @@ if __name__ == '__main__':
 	else:
 		print("\n\t{0} or {1} is not a .fasta file, please choose a different file\n".format(sequence_filename, alignment_filename))
 		exit()
-	'''
-	The following returns a list of the sequence headers ['chrI', 'chrII',
-	etc...) and genome ['ATC', 'TGGC', etc..] that is spliced out of a
-	given file based on if the line starts with > as seen in fasta
-	'''
 
 	small_align_dict = readingFileDict(alignment_filename)
-	#print(small_align_dict)
 	large_genome_dict = readingFileDict(sequence_filename)
-	#print(large_genome_dict)
 	# returns a dictionary that contains the name and sequence that will be compared against with all the genomes to be compared against
 	
 	# exit if the genome name is not found in the genome file
@@ -601,7 +565,6 @@ if __name__ == '__main__':
 
 	# creates a zero matrix for each aligned sequences compared to the larger genome
 	for pair in paired_seq:
-		#print(pair)
 		aligned_sequence = small_align_dict[pair[0]]
 		genome_to_align = large_genome_dict[pair[1]]
 		#print("aligned_sequence: {0}, genome: {1}".format(aligned_sequence, genome_to_align))
