@@ -3,14 +3,25 @@ real 1m41.054s
 user 1m38.424s
 sys 0m2.404s
 
+LEN 20
+real 3m3.318s
+user 2m58.080s
+sys 0m5.100s
+
 LEN 30
 real 5m14.255s
 user 5m6.844s
 sys 0m6.964s
+
+LEN 40
+real 7m12.469s
+user 7m2.824s
+sys 0m9.296s
 
 LEN 50
 real 12m59.363s
 user 12m46.088s
 sys  0m12.148s
 
-
+LEN 60
+Killed after 1 min
