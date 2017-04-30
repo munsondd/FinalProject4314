@@ -31,6 +31,27 @@ real	32m36.709s
 user	32m0.264s
 sys	0m35.040s
 
+LEN 80
 real	40m45.752s
 user	40m14.016s
 sys	0m30.284s
+
+LEN 90
+real	37m11.368s
+user	36m34.420s
+sys	0m36.112s
+
+LEN 100
+real	49m36.324s
+user	48m55.596s
+sys	0m39.480s
+
+LEN 110
+real	27m2.921s
+user	26m16.788s
+sys	0m39.972s
+
+LEN 120
+real	27m41.624s
+user	26m59.012s
+sys	0m42.516s
