@@ -1,0 +1,61 @@
+50
+100
+>AlcesAlgoBench_len_40_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_20_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_60_reads_50_with_time.txt
+true positives: 49 false positives: 1 false negatives: 0
+precision: 0.98 recall: 1.0 f value: 0.989898989899
+50
+100
+>AlcesAlgoBench_len_80_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_50_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_30_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_70_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_100_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_90_reads_50_with_time.txt
+true positives: 50 false positives: 0 false negatives: 0
+precision: 1.0 recall: 1.0 f value: 1.0
+50
+100
+>AlcesAlgoBench_len_10_reads_50_with_time.txt
+true positives: 47 false positives: 3 false negatives: 0
+precision: 0.94 recall: 1.0 f value: 0.969072164948
+bp	tp	fp	fn	f value
+10	94	6	0	0.969072164948
+20	100	0	0	1.0
+30	100	0	0	1.0
+40	100	0	0	1.0
+50	100	0	0	1.0
+60	98	2	0	0.989898989899
+70	100	0	0	1.0
+80	100	0	0	1.0
+90	100	0	0	1.0
+100	100	0	0	1.0
