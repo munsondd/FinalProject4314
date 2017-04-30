@@ -146,7 +146,7 @@ SEQ_3	-	START=6	END=14	GAPS_GENOME=0	GAPS_SEQ=1	MATCH=77.78
 SEQ_2	+	START=9	END=11	GAPS_GENOME=0	GAPS_SEQ=0	MATCH=100.00
 SEQ_2	-	START=2	END=5	GAPS_GENOME=0	GAPS_SEQ=1	MATCH=100.00
 ```
-### interpret bowtie results
+### Interpret Bowtie Results
 
 bowtie results are printed as follows:
 
